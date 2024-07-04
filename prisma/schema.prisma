@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  restaurant_name   String
+  tables            Boolean[] //index shows table no. , value shows whether its empty or not
+  table_assigned_to String[] //contains ids of customers on diff. table numbers
+  opening_time      DateTime
+  closing_time      DateTime
+  isOpen            Boolean
+  rating            String
+  restaurant_image  String
+  staff             Users[]
+}
+
+model Users {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  email        String
+  name         String
+  password     String      @unique
+  role         String      @default("customer")
+  Restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId String?     @default("") @db.ObjectId
+}
