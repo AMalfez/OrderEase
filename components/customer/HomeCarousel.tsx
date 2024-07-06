@@ -17,7 +17,7 @@ import Image from "next/image";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 const HomeCarousel = () => {
   return (
-    <div className="w-screen flex justify-center items-center mt-16 px-3">
+    <div className="w-screen flex justify-center items-center px-3">
       <Carousel
         opts={{
           align: "start",

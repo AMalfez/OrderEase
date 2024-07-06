@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FaHamburger } from "react-icons/fa";
 const Footer = () => {
   return (
-    <div className="text-center border py-5">
+    <div className="text-center border py-5 mt-20">
       <Link
         href="/"
         className="flex items-center justify-center mb-5 font-semibold text-gray-900"
