@@ -1,3 +1,4 @@
+'use client'
 import {
   Card,
   CardContent,
@@ -14,8 +15,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 const HomeCarousel = () => {
+  const router = useRouter();
+  const showRestaurant = (s:string)=>{
+    router.push(`/restaurant/${s}`);
+  }
   return (
     <div className="w-screen flex justify-center items-center px-3">
       <Carousel
@@ -27,11 +33,8 @@ const HomeCarousel = () => {
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, index) => (
             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-              <div className="p-1">
-                {/* <CardContent className="flex aspect-square items-center justify-center p-6">
-                    <span className="text-3xl font-semibold">{index + 1}</span>
-                  </CardContent> */}
-                <Card className="w-fit md:w-full">
+              <div onClick={()=>showRestaurant("desi-tadka")} className="p-1">
+                <Card className="w-fit md:w-full hover:bg-neutral-100  cursor-pointer">
                   <CardHeader>
                     <CardTitle>Desi Tadka</CardTitle>
                     <CardDescription>Near IIT Roorkee</CardDescription>
