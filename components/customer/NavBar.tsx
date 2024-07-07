@@ -9,10 +9,8 @@ const NavBar = () => {
 
   // Replace javascript:void(0) paths with your paths
   const navigation = [
-    { title: "Features", path: "javascript:void(0)" },
-    { title: "Integrations", path: "javascript:void(0)" },
-    { title: "Customers", path: "javascript:void(0)" },
-    { title: "Pricing", path: "javascript:void(0)" },
+    { title: "Business", path: "/restaurant" },
+    { title: "About us", path: "/about" },
   ];
 
   useEffect(() => {
@@ -88,9 +86,9 @@ const NavBar = () => {
             {navigation.map((item, idx) => {
               return (
                 <li key={idx} className="text-gray-700 hover:text-gray-900">
-                  <a href={item.path} className="block">
+                  <Link href={item.path} className="block">
                     {item.title}
-                  </a>
+                  </Link>
                 </li>
               );
             })}

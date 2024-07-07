@@ -1,8 +1,8 @@
+import { CreateForm } from "@/components/restaurant/CreateForm";
+
 const Home = ()=>{
     return(
-        <>
-        this is restuarant side app.
-        </>
+        <CreateForm/>
     )
 }
 export default Home;
