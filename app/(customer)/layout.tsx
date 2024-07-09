@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import Footer from "@/components/customer/Footer";
 import NavBar from "@/components/customer/NavBar";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "OrderEase",
@@ -15,6 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <section className="w-screen ">
+      <Toaster />
       <NavBar/>
       {children}
       <Footer/>
