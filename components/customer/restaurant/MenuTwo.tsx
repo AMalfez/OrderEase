@@ -9,9 +9,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 const MenuTwo = () => {
     const [number, setNumber] = useState(0);
+    const router = useRouter()
   const { toast } = useToast();
     const handleNum=(s:string)=>{
         const num = number;
@@ -71,8 +74,8 @@ const MenuTwo = () => {
                 <button
                   onClick={() => {
                     toast({
-                      title: "Scheduled: Catch up",
-                      description: "Friday, February 10, 2023 at 5:57 PM",
+                      title: "Item added to cart.",
+                      action: <ToastAction altText="View cart" className="px-4 py-2 rounded-lg bg-orange-400 text-white" onClick={()=>router.push("/cart")}>View cart</ToastAction>
                     });
                   }}
                   className="w-full border mt-3 rounded bg-orange-500 text-white py-1 hover:bg-orange-600"
