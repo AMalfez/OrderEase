@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,8 +16,10 @@ import { toast } from "@/components/ui/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RestaurantSchema } from "@/lib/utils/validation/RestaurantForm";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function CreateForm() {
+  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const form = useForm({
     resolver: yupResolver(RestaurantSchema),
@@ -42,6 +43,7 @@ export function CreateForm() {
         </pre>
       ),
     });
+    router.push("/restaurant/create-menu")
   }
   const handleImage = (e: any, fieldChange: (value: string) => void) => {
     e.preventDefault();
