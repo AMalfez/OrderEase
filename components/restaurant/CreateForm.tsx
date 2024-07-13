@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 export function CreateForm() {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: yupResolver(RestaurantSchema),
     defaultValues: {
@@ -43,6 +44,7 @@ export function CreateForm() {
         </pre>
       ),
     });
+    setLoading(true);
     router.push("/restaurant/create-menu")
   }
   const handleImage = (e: any, fieldChange: (value: string) => void) => {
@@ -152,7 +154,7 @@ export function CreateForm() {
               </FormItem>
             )}
           />
-          <Button className="w-full bg-orange-600 hover:bg-orange-700 text-xl" type="submit">Create</Button>
+          <Button className="w-full bg-orange-600 hover:bg-orange-700 text-xl" type="submit">{loading ? "Loading...":"Create"}</Button>
         </form>
       </div>
     </Form>
