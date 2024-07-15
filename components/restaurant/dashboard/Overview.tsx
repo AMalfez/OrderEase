@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OverviewCards from "./Overview/OverviewCards";
 import OverviewChart from "./Overview/OverviewChart";
+import { OrderTable } from "./Orders/OrderTable";
 
 const Overview = () => {
   return (
@@ -18,7 +19,9 @@ const Overview = () => {
           <OverviewChart/>
         </TabsContent>
         <TabsContent value="notifications">Change your password here.</TabsContent>
-        <TabsContent value="orders">Orders</TabsContent>
+        <TabsContent value="orders">
+          <OrderTable/>
+        </TabsContent>
         <TabsContent value="offers">Offers</TabsContent>
       </Tabs>
     </div>
