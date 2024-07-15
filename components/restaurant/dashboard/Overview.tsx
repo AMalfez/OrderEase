@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OverviewCards from "./Overview/OverviewCards";
 import OverviewChart from "./Overview/OverviewChart";
 import { OrderTable } from "./Orders/OrderTable";
+import { Offers } from "./Offers/Offers";
 
 const Overview = () => {
   return (
@@ -22,7 +23,9 @@ const Overview = () => {
         <TabsContent value="orders">
           <OrderTable/>
         </TabsContent>
-        <TabsContent value="offers">Offers</TabsContent>
+        <TabsContent value="offers">
+          <Offers/>
+        </TabsContent>
       </Tabs>
     </div>
   );

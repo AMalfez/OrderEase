@@ -20,6 +20,7 @@ export type Payment = {
   name: string;
   bill: "sent" | "not-sent";
   table_no: number;
+  order_status: "fulfilled" | "not-fulfilled";
 }
 
 export const columns: ColumnDef<Payment>[] = [
@@ -52,6 +53,10 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "bill",
     header: "Bill"
+  },
+  {
+    accessorKey: "order_status",
+    header: "Order Status"
   },
   {
     accessorKey: "amount",

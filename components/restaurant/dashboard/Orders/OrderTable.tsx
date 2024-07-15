@@ -8,7 +8,8 @@ export const OrderTable = () => {
         email: "m@example.com",
         name: "Alfez",
         table_no: 2,
-        bill: "sent"
+        bill: "sent",
+        order_status: "fulfilled"
       },
       {
         id: "721ed52f",
@@ -17,7 +18,8 @@ export const OrderTable = () => {
         email: "a@example.com",
         name: "sappu",
         table_no: 3,
-        bill: "not-sent"
+        bill: "not-sent",
+        order_status: "not-fulfilled"
       }]
   return (
   <div>
