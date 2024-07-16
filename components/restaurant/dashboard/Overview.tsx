@@ -11,7 +11,6 @@ const Overview = () => {
       <Tabs defaultValue="overview" className="w-full h-fit mt-10">
         <TabsList>
           <TabsTrigger value="overview" className="text-lg">Overview</TabsTrigger>
-          <TabsTrigger value="notifications" className="hidden md:block text-lg">Notification</TabsTrigger>
           <TabsTrigger value="orders" className="text-lg">Orders</TabsTrigger>
           <TabsTrigger value="offers" className="text-lg">Offers</TabsTrigger>
         </TabsList>
@@ -19,7 +18,6 @@ const Overview = () => {
           <OverviewCards/>
           <OverviewChart/>
         </TabsContent>
-        <TabsContent value="notifications">Change your password here.</TabsContent>
         <TabsContent value="orders">
           <OrderTable/>
         </TabsContent>

@@ -6,14 +6,14 @@ export const Offers = ()=>{
     date.setDate(11);
     const data: Offer[] =[
         {
-            title: TrimStringToDotted("Get a Lip smacking taste at mind smacking price",0,10),
-            desc: TrimStringToDotted("Get 50% Off on all the items above ₹1000.",0,10),
+            title: TrimStringToDotted("Get a Lip smacking taste at mind smacking price",0,20),
+            desc: TrimStringToDotted("Get 50% Off on all the items above ₹1000.",0,50),
             start_date: date.toLocaleDateString("en-US"),
             end_date: new Date().toLocaleDateString("en-US")
         },
         {
-            title: TrimStringToDotted("Lip smacking taste at mind smacking price",0,10),
-            desc: TrimStringToDotted("Get 50% Off on all the items above ₹1000.",0,10),
+            title: TrimStringToDotted("Lip smacking taste at mind smacking price",0,20),
+            desc: TrimStringToDotted("Get 50% Off on all the items above ₹1000.",0,50),
             start_date: date.toLocaleDateString("en-US"),
             end_date: new Date().toLocaleDateString("en-US")
         }

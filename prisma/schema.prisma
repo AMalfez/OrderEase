@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Restaurant {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
   restaurant_name   String
   tables            Boolean[] //index shows table no. , value shows whether its empty or not
   table_assigned_to String[] //contains ids of customers on diff. table numbers
@@ -17,15 +17,54 @@ model Restaurant {
   isOpen            Boolean
   rating            String
   restaurant_image  String
-  staff             Users[]
+  Menu              Item[]
+  Feedbacks         Feedback[]
+  Orders            Order[]
 }
 
-model Users {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  email        String
-  name         String
-  password     String      @unique
-  role         String      @default("customer")
-  Restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
-  restaurantId String?     @default("") @db.ObjectId
+model User {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  email         String
+  userId        String     @unique
+  profile_photo String
+  name          String
+  password      String     @unique
+  role          String     @default("customer")
+  restaurantId  String     @default("") @db.ObjectId
+  Feedbacks     Feedback[]
+  Orders        Order[]
+}
+
+model Feedback {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  User         User       @relation(fields: [userId], references: [id])
+  Restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  userId       String     @default("") @db.ObjectId
+  restaurantId String     @default("") @db.ObjectId
+}
+
+model Item {
+  id                   String     @id @default(auto()) @map("_id") @db.ObjectId
+  image                String
+  Restaurant           Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId         String     @default("") @db.ObjectId
+  name                 String
+  category             String
+  price                String
+  quantity_per_price   String
+  available_quantities String
+  Orders               Order[]    @relation(fields: [OrderIds], references: [id])
+  OrderIds             String[]   @db.ObjectId
+}
+
+model Order {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  Items        Item[]     @relation(fields: [ItemsIds], references: [id])
+  ItemsIds     String[]   @db.ObjectId
+  Restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId String     @default("") @db.ObjectId
+  quantity     String
+  total_amount String
+  User         User       @relation(fields: [userId], references: [id])
+  userId       String     @db.ObjectId
 }

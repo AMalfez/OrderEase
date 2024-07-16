@@ -25,6 +25,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { CreateOffer } from "./CreateOffer";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -51,8 +53,8 @@ export function DataTable<TData, TValue>({
     });
   
     return (
-      <div>
-        <div className="flex items-center py-4">
+      <Dialog>
+        <div className="flex items-center justify-between py-4">
           <Input
             placeholder="Filter by title..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -61,6 +63,10 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm"
           />
+        <DialogTrigger asChild>
+            <Button>+ Create Offer</Button>
+        </DialogTrigger>
+        <CreateOffer/>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -130,7 +136,7 @@ export function DataTable<TData, TValue>({
             Next
           </Button>
         </div>
-      </div>
+      </Dialog>
     );
   }
   
