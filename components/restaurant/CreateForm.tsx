@@ -16,11 +16,12 @@ import { toast } from "@/components/ui/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RestaurantSchema } from "@/lib/utils/validation/RestaurantForm";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { createRestaurant } from "@/lib/actions/UserActions";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export function CreateForm() {
   const router = useRouter();
-  const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: yupResolver(RestaurantSchema),
@@ -33,39 +34,35 @@ export function CreateForm() {
     },
   });
 
-  function onSubmit(data: any) {
+  async function onSubmit(data: any) {
     console.log(data);
-
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    const tables = new Array(data.tables).fill(false);
     setLoading(true);
-    router.push("/restaurant/create-menu")
-  }
-  const handleImage = (e: any, fieldChange: (value: string) => void) => {
-    e.preventDefault();
-
-    const fileReader = new FileReader();
-
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setFiles(Array.from(e.target.files));
-
-      if (!file.type.includes("image")) return;
-
-      fileReader.onload = async (event) => {
-        const imageDataUrl = event.target?.result?.toString() || "";
-        fieldChange(imageDataUrl);
-      };
-
-      fileReader.readAsDataURL(file);
+    try {
+    await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables})
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        ),
+      });
+      redirect("/restaurant/dashboard")
+    } catch (error:any) {
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        ),
+      });
     }
-  };
+    
+    setLoading(false);
+    // router.push("/restaurant/create-menu")
+  }
 
   return (
     <Form {...form}>
@@ -83,9 +80,9 @@ export function CreateForm() {
                 <FormLabel className="text-xl">Photo of restaurant</FormLabel>
                 <FormControl>
                   <Input
-                    type="file"
-                    placeholder="Add a profile"
-                    onChange={(e) => handleImage(e, field.onChange)}
+                    type="text"
+                    placeholder="Google drive link of your restaurant image"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />

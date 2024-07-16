@@ -9,13 +9,13 @@ datasource db {
 
 model Restaurant {
   id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId           String     @unique
   restaurant_name   String
   tables            Boolean[] //index shows table no. , value shows whether its empty or not
-  table_assigned_to String[] //contains ids of customers on diff. table numbers
-  opening_time      DateTime
-  closing_time      DateTime
-  isOpen            Boolean
-  rating            String
+  opening_time      String
+  closing_time      String
+  isOpen            Boolean   @default(false)
+  rating            String    @default("3.5")
   restaurant_image  String
   Menu              Item[]
   Feedbacks         Feedback[]
@@ -24,13 +24,13 @@ model Restaurant {
 
 model User {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  email         String
   userId        String     @unique
+  email         String
   profile_photo String
   name          String
-  password      String     @unique
   role          String     @default("customer")
-  restaurantId  String     @default("") @db.ObjectId
+  onboarded     Boolean    @default(false)
+  restaurantId  String     @default("")
   Feedbacks     Feedback[]
   Orders        Order[]
 }
