@@ -7,12 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model RestaurantUrlMap{
+  id     String  @db.ObjectId @id @default(auto()) @map("_id")
+  name   String   @unique
+  url    String
+}
+
 model Restaurant {
   id                String     @id @default(auto()) @map("_id") @db.ObjectId
   ownerId           String     @unique
-  restaurant_name   String
+  restaurant_name   String     @unique
   tables            Boolean[] //index shows table no. , value shows whether its empty or not
   opening_time      String
+  address           String
   closing_time      String
   isOpen            Boolean   @default(false)
   rating            String    @default("3.5")

@@ -21,4 +21,5 @@ export interface CreateRestaurantFields {
   opening_time: string;
   closing_time: string;
   restaurant_image: string;
+  address: string;
 }

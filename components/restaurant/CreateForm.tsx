@@ -16,9 +16,8 @@ import { toast } from "@/components/ui/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RestaurantSchema } from "@/lib/utils/validation/RestaurantForm";
 import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
-import { createRestaurant } from "@/lib/actions/UserActions";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { useRouter } from "next/navigation";
+import { createRestaurant } from "@/lib/actions/RestaurantActions";
 
 export function CreateForm() {
   const router = useRouter();
@@ -31,6 +30,7 @@ export function CreateForm() {
       tables: 0,
       opening_time: "",
       closing_time: "",
+      address:""
     },
   });
 
@@ -38,7 +38,7 @@ export function CreateForm() {
     console.log(data);
     const tables = new Array(data.tables).fill(false);
     try {
-      await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables})
+      await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables,address:"Near roorkee"})
       router.push("/restaurant/dashboard")
       setLoading(true);
     } catch (error:any) {
