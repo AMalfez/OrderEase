@@ -37,18 +37,10 @@ export function CreateForm() {
   async function onSubmit(data: any) {
     console.log(data);
     const tables = new Array(data.tables).fill(false);
-    setLoading(true);
     try {
-    await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables})
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-      redirect("/restaurant/dashboard")
+      await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables})
+      router.push("/restaurant/dashboard")
+      setLoading(true);
     } catch (error:any) {
       toast({
         title: "You submitted the following values:",
