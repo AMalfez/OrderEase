@@ -4,9 +4,6 @@ import { Inter as FontSans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
-import { getUserByUserId, getUserId, PostUser } from "@/lib/actions/UserActions";
-import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -22,19 +19,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await currentUser();
-  if(!user?.id) redirect("/sign-in");
-  else{
-    const userdata = await getUserByUserId(user?.id+"");
-    if(!userdata){
-      await PostUser({
-        name: user.fullName ? user.fullName+"" : user.username+"",
-        userId: user.id,
-        email: user.emailAddresses[0].emailAddress,
-        image: user.imageUrl
-      })
-    }
-  }
   return (
     <html lang="en">
       <ClerkProvider>
