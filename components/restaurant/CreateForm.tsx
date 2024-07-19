@@ -54,7 +54,7 @@ export function CreateForm() {
     }
     try {
       setLoading(true);
-      await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables,address:"Near roorkee"})
+      await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables,address:data.address})
       router.push("/restaurant/dashboard")
     } catch (error:any) {
       toast({
