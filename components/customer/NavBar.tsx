@@ -1,25 +1,40 @@
 "use client";
+import { getUserByUserId } from "@/lib/actions/UserActions";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaHamburger } from "react-icons/fa";
 
-const NavBar = () => {
+const NavBar = ({userId}:any) => {
   const [state, setState] = useState(false);
-
-  // Replace javascript:void(0) paths with your paths
-  const navigation = [
+  const [user, setUser] = useState<any>();
+  const navigation = !user ? [
     { title: "Business", path: "/restaurant" },
+    { title: "About us", path: "/about" },
+    {title: "Cart", path:"/cart"},
+    {title: "History", path:"/order-history"}
+  ]:[
+    { title: user?.restaurantId==="" ? "Business":"Dashboard", path: user?.restaurantId==="" ? "/restaurant":"/restaurant/dashboard" },
     { title: "About us", path: "/about" },
     {title: "Cart", path:"/cart"},
     {title: "History", path:"/order-history"}
   ];
 
+  const getUser = async()=>{
+    if(userId){
+      const userdata = await getUserByUserId(userId);
+      setUser(userdata);
+    }else{
+      setUser(undefined);
+    }
+  }
   useEffect(() => {
     document.onclick = (e) => {
       const target = e.target;
       if (!(target as HTMLElement)?.closest(".menu-btn")) setState(false);
     };
+    getUser();
   }, []);
 
   return (

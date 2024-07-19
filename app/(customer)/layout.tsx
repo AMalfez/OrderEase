@@ -29,7 +29,7 @@ export default async function RootLayout({
   return (
     <section className="w-screen ">
       <Toaster />
-      <NavBar/>
+      <NavBar userId={user?.id}/>
       {children}
       <Footer/>
     </section>
