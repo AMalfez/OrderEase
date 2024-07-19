@@ -38,9 +38,8 @@ export function CreateForm() {
       address:""
     },
   });
-
+  const onInvalid = (errors:any) => console.log(errors)
   const onSubmit = async(data: any) => {
-    alert("click")
     console.log(data);
     const tables = new Array(data.tables).fill(false);
     const blob = data.restaurant_image;
@@ -54,9 +53,9 @@ export function CreateForm() {
       }
     }
     try {
+      setLoading(true);
       await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables,address:"Near roorkee"})
       router.push("/restaurant/dashboard")
-      setLoading(true);
     } catch (error:any) {
       toast({
         title: "You submitted the following values:",
@@ -69,7 +68,7 @@ export function CreateForm() {
     }
     
     setLoading(false);
-    router.push("/restaurant/create-menu")
+    // router.push("/restaurant/create-menu")
   }
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
@@ -97,7 +96,7 @@ export function CreateForm() {
     <Form {...form}>
       <div className="h-screen w-screen flex flex-col justify-center items-center bg-orange-100">
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit, onInvalid)}
           className="w-2/3 lg:w-1/3 space-y-6 border p-8 rounded-2xl bg-white shadow-2xl shadow-orange-500"
         >
         <p className="text-center mb-2 text-2xl md:text-4xl font-semibold">Create your <span className="text-orange-800">restaurant</span></p>
@@ -164,6 +163,19 @@ export function CreateForm() {
                 <FormLabel className="text-xl">Restaurant Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter Your restaurant name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-xl">Restaurant Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter Your restaurant address" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
