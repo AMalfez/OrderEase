@@ -67,8 +67,8 @@ export function CreateForm() {
       });
     }
     
+    router.push("/restaurant/dashboard")
     setLoading(false);
-    // router.push("/restaurant/create-menu")
   }
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
