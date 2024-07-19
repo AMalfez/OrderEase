@@ -10,7 +10,7 @@ datasource db {
 model RestaurantUrlMap{
   id     String  @db.ObjectId @id @default(auto()) @map("_id")
   name   String   @unique
-  url    String
+  url    String        
 }
 
 model Restaurant {
