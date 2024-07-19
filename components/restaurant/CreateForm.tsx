@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useUploadThing } from "@/lib/utils/validation/uploadthing";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,11 +16,15 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RestaurantSchema } from "@/lib/utils/validation/RestaurantForm";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createRestaurant } from "@/lib/actions/RestaurantActions";
+import { isBase64Image } from "@/lib/utils/Utilities";
+import Image from "next/image";
 
 export function CreateForm() {
+  const { startUpload } = useUploadThing("media");
+  const [files, setFiles] = useState<File[]>([]);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const form = useForm({
@@ -34,9 +39,20 @@ export function CreateForm() {
     },
   });
 
-  async function onSubmit(data: any) {
+  const onSubmit = async(data: any) => {
+    alert("click")
     console.log(data);
     const tables = new Array(data.tables).fill(false);
+    const blob = data.restaurant_image;
+
+    const hasImageChanged = isBase64Image(blob);
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+
+      if (imgRes && imgRes[0].url) {
+        data.restaurant_image = imgRes[0].url;
+      }
+    }
     try {
       await createRestaurant({opening_time:data.opening_time, restaurant_image:data.restaurant_image, restaurant_name:data.restaurant_name, closing_time:data.closing_time, tables,address:"Near roorkee"})
       router.push("/restaurant/dashboard")
@@ -53,8 +69,29 @@ export function CreateForm() {
     }
     
     setLoading(false);
-    // router.push("/restaurant/create-menu")
+    router.push("/restaurant/create-menu")
   }
+  const handleImage = (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void
+  ) => {
+    e.preventDefault();
+    const fileReader = new FileReader();
+
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setFiles(Array.from(e.target.files));
+
+      if (!file.type.includes("image")) return;
+
+      fileReader.onload = async (event) => {
+        const imageDataUrl = event.target?.result?.toString() || "";
+        fieldChange(imageDataUrl);
+      };
+
+      fileReader.readAsDataURL(file);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -64,23 +101,44 @@ export function CreateForm() {
           className="w-2/3 lg:w-1/3 space-y-6 border p-8 rounded-2xl bg-white shadow-2xl shadow-orange-500"
         >
         <p className="text-center mb-2 text-2xl md:text-4xl font-semibold">Create your <span className="text-orange-800">restaurant</span></p>
-          <FormField
-            control={form.control}
-            name="restaurant_image"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-xl">Photo of restaurant</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="Google drive link of your restaurant image"
-                    {...field}
+        <FormField
+          control={form.control}
+          name='restaurant_image'
+          render={({ field }) => (
+            <FormItem className='flex items-center gap-4'>
+              <FormLabel className='account-form_image-label'>
+                {field.value ? (
+                  <Image
+                    src={field.value}
+                    alt='profile_icon'
+                    width={96}
+                    height={96}
+                    priority
+                    className='rounded-full object-contain'
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                ) : (
+                  <Image
+                    src='/assets/profile.svg'
+                    alt='profile_icon'
+                    width={24}
+                    height={24}
+                    className='object-contain'
+                  />
+                )}
+              </FormLabel>
+              <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                <Input
+                  type='file'
+                  accept='image/*'
+                  placeholder='Add restaurant photo'
+                  className='account-form_image-input'
+                  onChange={(e) => handleImage(e, field.onChange)}
+                />
+              </FormControl>
+              <FormMessage/>
+            </FormItem>
+          )}
+        />
           <FormField
             control={form.control}
             name="tables"

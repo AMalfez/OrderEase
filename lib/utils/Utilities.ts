@@ -10,3 +10,8 @@ export const CreateUrl = (s:string)=>{
   for(let i = 0; i<parts.length; i++) url+=parts[i];
   return url;
 }
+
+export function isBase64Image(imageData: string) {
+  const base64Regex = /^data:image\/(png|jpe?g|gif|webp);base64,/;
+  return base64Regex.test(imageData);
+}
