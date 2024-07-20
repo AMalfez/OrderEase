@@ -1,5 +1,4 @@
 import Image from "next/image";
-import User from "@/lib/Images/User.jpg";
 const Review = ({testimonials}:any) => {
   return (
     <section className="text-gray-600 body-font mt-16">
