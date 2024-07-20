@@ -1,7 +1,6 @@
 "use client";
 import { getUserByUserId } from "@/lib/actions/UserActions";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaHamburger } from "react-icons/fa";
@@ -10,7 +9,6 @@ const NavBar = ({userId}:any) => {
   const [state, setState] = useState(false);
   const [user, setUser] = useState<any>();
   const navigation = !user ? [
-    { title: "Business", path: "/restaurant" },
     { title: "About us", path: "/about" },
     {title: "Cart", path:"/cart"},
     {title: "History", path:"/order-history"}

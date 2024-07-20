@@ -20,30 +20,28 @@ import { useRouter } from "next/navigation";
 import { Restaurant } from "@/lib/constants/restaurant";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { GetAllRestaurant, GetRestaurantByUserId } from "@/lib/actions/RestaurantActions";
+import { GetAllRestaurant } from "@/lib/actions/RestaurantActions";
+import HomeCarouselSkeleton from "./HomeCarouselSkeleton";
 
 const HomeCarousel = ({userId}:any) => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [rest, setRest] = useState<Restaurant[]>([{
-    id: "",
-    ownerId: "",
-    restaurant_name: "",
-    tables: [],
-    opening_time: "",
-    closing_time: "",
-    isOpen: true,
-    rating: "",
-    restaurant_image: "",
-  }]);
+  const [rest, setRest] = useState<Restaurant[] | undefined>(undefined);
 
   useEffect(()=>{
+    setLoading(true);
     getRestByUserId()
   },[userId])
   const getRestByUserId=async()=>{
-    const Rest = await GetAllRestaurant();
-    console.log(Rest);
-    
-    setRest(Rest)
+    try {
+      const Rest = await GetAllRestaurant();
+      console.log(Rest);
+      
+      setRest(Rest)
+    } catch (error:any) {
+      console.log(error);
+    }
+    setLoading(false);
   }
 
   const showRestaurant = (s: string) => {
@@ -51,14 +49,15 @@ const HomeCarousel = ({userId}:any) => {
   };
   return (
     <div className="w-screen flex justify-center items-center px-3">
-      <Carousel
+      {(loading || !rest) && (<HomeCarouselSkeleton/>)}
+      {(!loading && rest) && (<Carousel
         opts={{
           align: "start",
         }}
         className="w-9/12 md:w-10/12"
       >
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {rest.map((r, index) => (
             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
               <div
                 onClick={() => showRestaurant(restaurant_url_map[0].url)}
@@ -66,24 +65,24 @@ const HomeCarousel = ({userId}:any) => {
               >
                 <Card className="w-fit md:w-full hover:bg-neutral-100  cursor-pointer">
                   <CardHeader>
-                    <CardTitle>{restaurant_url_map[0].name}</CardTitle>
-                    <CardDescription>Near IIT Roorkee</CardDescription>
+                    <CardTitle>{r.restaurant_name}</CardTitle>
+                    <CardDescription>{r.address}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Image
                       src={
-                        "https://lh3.googleusercontent.com/myzvDNXes6_iwVDVCj1kk_IGy0m9JeL7B6W5JjD4-2yTOrTaxE1_eVdVMA2Ko-zMftlrpFG56O0FxfuAOeglLyIC46U=w1200-rw"
+                        `${r.restaurant_image}`
                       }
-                      alt="Desi tadka image"
+                      alt={`${r.restaurant_name} image`}
                       width={400}
                       height={200}
-                      className="hidden md:block"
+                      className="hidden md:block object-contain"
                     />
                     <Image
                       src={
-                        "https://lh3.googleusercontent.com/myzvDNXes6_iwVDVCj1kk_IGy0m9JeL7B6W5JjD4-2yTOrTaxE1_eVdVMA2Ko-zMftlrpFG56O0FxfuAOeglLyIC46U=w1200-rw"
+                        `${r.restaurant_image}`
                       }
-                      alt="Desi tadka image"
+                      alt={`${r.restaurant_name} image`}
                       width={600}
                       height={10}
                       className="block md:hidden object-fill"
@@ -92,12 +91,16 @@ const HomeCarousel = ({userId}:any) => {
                   </CardContent>
                   <CardFooter>
                     <p className="flex justify-center items-center">
-                      <span className="mr-1">3.5</span>
-                      {Array.from({ length: 3 }).map((_, ind) => (
+                      <span className="mr-1">{r.rating}</span>
+                      {Array.from({ length: Math.ceil(parseInt(r.rating)) }).map((_, ind) => (
                         <FaStar key={ind} className="text-amber-400" />
                       ))}
-                      <FaStarHalfAlt className="text-amber-400" />
-                      <FaRegStar className="text-amber-400" />
+                      {Array.from({ length: Math.ceil(parseInt(r.rating) - Math.floor(parseInt(r.rating)))+1 }).map((_, ind) => (
+                        <FaStarHalfAlt className="text-amber-400" />
+                      ))}
+                      {Array.from({length: 4 - Math.ceil(parseInt(r.rating))}).map((_,ind)=>(
+                        <FaRegStar className="text-amber-400" />
+                      ))}
                     </p>
                   </CardFooter>
                 </Card>
@@ -107,7 +110,7 @@ const HomeCarousel = ({userId}:any) => {
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
-      </Carousel>
+      </Carousel>)}
     </div>
   );
 };

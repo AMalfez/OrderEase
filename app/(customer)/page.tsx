@@ -1,5 +1,6 @@
 import Hero from "@/components/customer/Hero"
 import HomeCarousel from "@/components/customer/HomeCarousel"
+import HomeCarouselSkeleton from "@/components/customer/HomeCarouselSkeleton";
 import { Offers } from "@/components/customer/Offers"
 import { currentUser } from "@clerk/nextjs/server"
 

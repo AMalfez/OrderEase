@@ -8,4 +8,5 @@ export interface Restaurant {
   isOpen: boolean;
   rating: string;
   restaurant_image: string;
+  address:string;
 }

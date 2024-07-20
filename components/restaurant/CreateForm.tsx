@@ -129,7 +129,7 @@ export function CreateForm() {
                 <Input
                   type='file'
                   accept='image/*'
-                  placeholder='Add restaurant photo'
+                  placeholder='Add 400x200 restaurant photo'
                   className='account-form_image-input'
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
