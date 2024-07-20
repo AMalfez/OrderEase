@@ -14,7 +14,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { restaurant_url_map } from "@/lib/DummyData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Restaurant } from "@/lib/constants/restaurant";
@@ -30,7 +29,8 @@ const HomeCarousel = ({userId}:any) => {
 
   useEffect(()=>{
     setLoading(true);
-    getRestByUserId()
+    getRestByUserId();
+    setLoading(false);
   },[userId])
   const getRestByUserId=async()=>{
     try {
@@ -41,9 +41,7 @@ const HomeCarousel = ({userId}:any) => {
     } catch (error:any) {
       console.log(error);
     }
-    setLoading(false);
   }
-
   const showRestaurant = (s: string) => {
     router.push(`/restaurant/${s}`);
   };
@@ -60,7 +58,7 @@ const HomeCarousel = ({userId}:any) => {
           {rest.map((r, index) => (
             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
               <div
-                onClick={() => showRestaurant(restaurant_url_map[0].url)}
+                onClick={() => showRestaurant(r.id)}
                 className="p-1"
               >
                 <Card className="w-fit md:w-full hover:bg-neutral-100  cursor-pointer">

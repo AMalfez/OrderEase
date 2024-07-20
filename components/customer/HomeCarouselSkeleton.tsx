@@ -1,3 +1,4 @@
+"use client"
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
@@ -37,7 +38,7 @@ const HomeCarouselSkeleton = () => {
                   </CardHeader>
                   <CardContent>
                     <Skeleton
-                      className="w-[400px] h-[200px] hidden md:block object-contain"
+                      className="w-full h-[200px] hidden md:block object-contain"
                     />
                     
                     <p className="block md:hidden"><Skeleton className="w-1/2 h-[20px]" /></p>

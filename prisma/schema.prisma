@@ -7,26 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model RestaurantUrlMap{
-  id     String  @db.ObjectId @id @default(auto()) @map("_id")
-  name   String   @unique
-  url    String        
-}
-
 model Restaurant {
-  id                String     @id @default(auto()) @map("_id") @db.ObjectId
-  ownerId           String     @unique
-  restaurant_name   String     @unique
-  tables            Boolean[] //index shows table no. , value shows whether its empty or not
-  opening_time      String
-  address           String
-  closing_time      String
-  isOpen            Boolean   @default(false)
-  rating            String    @default("3.5")
-  restaurant_image  String
-  Menu              Item[]
-  Feedbacks         Feedback[]
-  Orders            Order[]
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId          String     @unique
+  restaurant_name  String     @unique
+  tables           Boolean[] //index shows table no. , value shows whether its empty or not
+  opening_time     String
+  address          String
+  closing_time     String
+  isOpen           Boolean    @default(false)
+  rating           String     @default("3.5")
+  restaurant_image String
+  Menu             Item[]
+  Feedbacks        Feedback[]
+  Orders           Order[]
 }
 
 model User {
@@ -43,11 +37,15 @@ model User {
 }
 
 model Feedback {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  User         User       @relation(fields: [userId], references: [id])
-  Restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-  userId       String     @default("") @db.ObjectId
-  restaurantId String     @default("") @db.ObjectId
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  User          User       @relation(fields: [userId], references: [id])
+  Restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  userId        String     @default("") @db.ObjectId
+  restaurantId  String     @default("") @db.ObjectId
+  feedback      String
+  user_name     String
+  user_image    String
+  isTestimonial Boolean    @default(false)
 }
 
 model Item {
