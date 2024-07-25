@@ -1,7 +1,7 @@
 const Page =()=>{
     return(
-        <div>
-            Page
+        <div className="border w-full">
+            Restaurant
         </div>
     )
 }

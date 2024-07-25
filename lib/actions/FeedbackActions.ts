@@ -17,3 +17,14 @@ export async function postTestimonial(data:Testimonial){
         throw new Error(err)
     }
 }
+
+export async function getAllTestimonials() {
+    try {
+        const get = await prisma.feedback.findMany();
+        console.log(get);
+        
+        return get;
+    } catch (error:any) {
+        throw new Error(error);
+    }
+}

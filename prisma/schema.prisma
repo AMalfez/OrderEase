@@ -44,7 +44,7 @@ model Feedback {
   restaurantId  String     @default("") @db.ObjectId
   feedback      String
   user_name     String
-  user_image    String
+  user_image    String?
   isTestimonial Boolean    @default(false)
 }
 
