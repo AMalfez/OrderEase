@@ -91,19 +91,3 @@ export async function getRestaurantByRestaurantId(id: string) {
     throw new Error("An error occured fetching the restaurant.");
   }
 }
-
-export async function getTestimonialsByRestId(id: string) {
-  try {
-    const testims = await prisma.feedback.findMany({
-      where: {
-        id,
-        isTestimonial: true,
-      },
-    });
-    console.log(testims);
-    return testims;
-  } catch (error: any) {
-    console.log(error);
-    throw new Error("Can't fetch testimonials.");
-  }
-}
