@@ -45,7 +45,13 @@ model Feedback {
   feedback      String
   user_name     String
   user_image    String?
-  isTestimonial Boolean    @default(false)
+}
+
+model Testimonial{
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  restaurantId  String
+  testimonial   String
+  user_name     String
 }
 
 model Item {

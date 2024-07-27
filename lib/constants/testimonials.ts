@@ -1,9 +1,6 @@
 export interface Testimonial{
-    id: string;
+    id?: string;
     user_name: string;
-    user_image: string;
-    feedback: string;
+    testimonial: string;
     restaurantId: string;
-    userId: string;
-    isTestimonial: boolean;
 }

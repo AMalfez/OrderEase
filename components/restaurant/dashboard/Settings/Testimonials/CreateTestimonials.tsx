@@ -1,6 +1,5 @@
 "use client";
 
-import { getAllTestimonials } from "@/lib/actions/FeedbackActions";
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -23,8 +22,8 @@ const CreateTestimonials = () => {
   const getTestimonials = async () => {
     setLoading(true);
     try {
-      const test = await getAllTestimonials();
-      setTestimonials(test);
+      // const test = await getAllTestimonials();
+      // setTestimonials(test);
     } catch (error: any) {
       console.log(error);
       alert("An error occured");
