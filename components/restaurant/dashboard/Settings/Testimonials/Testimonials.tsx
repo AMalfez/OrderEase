@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 import TestimonialsSkeleton from "./Skeleton";
-import { getAllTestimonials } from "@/lib/actions/FeedbackActions";
+import { getAllTestimonials } from "@/lib/actions/TestimonialAction";
 
 const Testimonials = ()=>{
     const [loading,setLoading] = useState(false);
@@ -27,10 +27,10 @@ const Testimonials = ()=>{
     }
     return(
         <div className="flex gap-2 w-full">
-            {testimonials.filter(t => t.isTestimonial === true).map((t:any, ind:number)=>(
-                <div key={ind} className="border py-5 rounded-xl flex flex-col w-1/3 gap-2 justify-center items-center">
-                    <p>{t.feedback}</p>
-                    <p>{t.user_name}</p>
+            {testimonials.map((t:any, ind:number)=>(
+                <div key={ind} className="border p-5 min-h-44 rounded-xl flex flex-col w-1/3 gap-2 justify-center items-center">
+                    <p className="text-xl text-center">"{t.testimonial}"</p>
+                    <p className="text-xl text-neutral-500">{t.user_name}</p>
                 </div>
             ))}
         </div>

@@ -1,10 +1,11 @@
 "use client";
-import { getRestaurantByRestaurantId, getTestimonialsByRestId } from "@/lib/actions/RestaurantActions";
+import { getRestaurantByRestaurantId } from "@/lib/actions/RestaurantActions";
 import { Restaurant } from "@/lib/constants/restaurant";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Review from "./Review";
+import { getTestimonialsByRestId } from "@/lib/actions/TestimonialAction";
 
 const Description = ({ slug, userId }: any) => {
   const [restaurant, setRestaurant] = useState<any | undefined>(
