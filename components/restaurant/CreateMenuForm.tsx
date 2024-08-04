@@ -13,11 +13,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { ChangeEvent, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { MenuSchema } from "@/lib/utils/validation/MenuForm";
+import { isBase64Image } from "@/lib/utils/Utilities";
+import { useUploadThing } from "@/lib/utils/validation/uploadthing";
+import { AddItemToMenu } from "@/lib/actions/MenuActions";
 const CreateMenuForm = () => {
-  const router = useRouter();
+  // const router = useRouter();
+  const pathname = usePathname();
+  const [loading, setLoading] = useState(false);
+  const { startUpload } = useUploadThing("media");
   const [files, setFiles] = useState<File[]>([]);
   const form = useForm({
     resolver: yupResolver(MenuSchema),
@@ -25,38 +31,38 @@ const CreateMenuForm = () => {
       category: "",
       image: "",
       price: 0,
-      quantity_for_price: "",
+      quantity_per_price: "",
       available_quantities: "",
       name: "",
     },
   });
-  function addAnotherItem(){
-    form.reset();
-    toast({
-        title: "Form reset.",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            Now you can upload new item.
-          </pre>
-        ),
-      });
-  }
-  function onSubmit(data: any) {
-    console.log(data);
+  async function onSubmit(data: any) {
+    const blob = data.image;
 
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-    form.reset()
+    const hasImageChanged = isBase64Image(blob);
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+
+      if (imgRes && imgRes[0].url) {
+        data.image = imgRes[0].url;
+      }
+    }
+
+    try {
+      setLoading(true);
+      await AddItemToMenu({...data, pathname});
+      window.location.reload();
+    } catch (error:any) {
+      alert(error);
+    }
+    
+    setLoading(false);
   }
-  const handleImage = (e: any, fieldChange: (value: string) => void) => {
+  const handleImage = (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void
+  ) => {
     e.preventDefault();
-
     const fileReader = new FileReader();
 
     if (e.target.files && e.target.files.length > 0) {
@@ -75,18 +81,17 @@ const CreateMenuForm = () => {
   };
   return (
     <Form {...form}>
-      <div className="h-fit w-full flex flex-col items-center">
+      <div className="h-fit w-full flex flex-col">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-11/12 space-y-6 p-8 rounded-2xl bg-white shadow-2xl shadow-orange-500"
+          className="space-y-6 bg-white"
         >
-          <div className="flex w-full gap-3">
             <FormField
                 control={form.control}
                 name="image"                
                 render={({ field }) => (
-                <FormItem className="w-1/2">
-                    <FormLabel className="text-xl">Photo of Item</FormLabel>
+                <FormItem className="w-full">
+                    <FormLabel className="text-md font-semibold">Photo of Item</FormLabel>
                     <FormControl>
                     <Input
                         type="file"
@@ -103,8 +108,8 @@ const CreateMenuForm = () => {
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                <FormItem className="w-1/2">
-                    <FormLabel className="text-xl">Item Name</FormLabel>
+                <FormItem className="w-full">
+                    <FormLabel className="text-md font-semibold">Item Name</FormLabel>
                     <FormControl>
                     <Input placeholder="Enter dish name" {...field} />
                     </FormControl>
@@ -112,14 +117,12 @@ const CreateMenuForm = () => {
                 </FormItem>
                 )}
             />
-          </div>
-          <div className="flex w-full gap-3">
           <FormField
             control={form.control}
             name="price"
             render={({ field }) => (
-              <FormItem className="w-1/2">
-                <FormLabel className="text-xl">
+              <FormItem className="w-full">
+                <FormLabel className="text-md font-semibold">
                   Price of item per unit
                 </FormLabel>
                 <FormControl>
@@ -136,10 +139,10 @@ const CreateMenuForm = () => {
           
           <FormField
             control={form.control}
-            name="quantity_for_price"
+            name="quantity_per_price"
             render={({ field }) => (
-              <FormItem className="w-1/2">
-                <FormLabel className="text-xl">Quantity per unit</FormLabel>
+              <FormItem className="w-full">
+                <FormLabel className="text-md font-semibold">Quantity per unit</FormLabel>
                 <FormControl>
                   <Input placeholder="Ex: Quarter, 1 slice, etc." {...field} />
                 </FormControl>
@@ -147,14 +150,12 @@ const CreateMenuForm = () => {
               </FormItem>
             )}
           />
-        </div>
-          <div className="flex w-full gap-3">
           <FormField
             control={form.control}
             name="category"
             render={({ field }) => (
-              <FormItem className="w-1/2 ">
-                <FormLabel className="text-xl">Item Category</FormLabel>
+              <FormItem className="w-full ">
+                <FormLabel className="text-md font-semibold">Item Category</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Ex: Non-Veg, Veg, Sweets, etc."
@@ -169,8 +170,8 @@ const CreateMenuForm = () => {
             control={form.control}
             name="available_quantities"
             render={({ field }) => (
-              <FormItem className="w-1/2">
-                <FormLabel className="text-xl">Available Quantity</FormLabel>
+              <FormItem className="w-full">
+                <FormLabel className="text-md font-semibold">Available Quantity</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Ex: Quarter, half, full, etc."
@@ -181,12 +182,11 @@ const CreateMenuForm = () => {
               </FormItem>
             )}
           />
-          </div>
           <Button
             className="w-full bg-orange-500 hover:bg-orange-600"
-            type="submit"
+            type={loading?"button":"submit"}
           >
-            Add to my menu
+            {loading?"Loading...":"Add to my menu"}
           </Button>
           {/* <Button className="border border-orange-600 bg-white w-full text-orange-600 hover:bg-white">Add +</Button> */}
         </form>

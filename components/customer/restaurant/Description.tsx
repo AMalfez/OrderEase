@@ -34,7 +34,7 @@ const Description = ({ slug, userId }: any) => {
   }
   const router = useRouter();
   const createOrder = () => {
-    router.push(`/restaurant/${slug}/createOrder/${userId}`);
+    router.push(`/restaurant/${slug}/createOrder/${userId}/${slug}`);
   };
   if (!restaurant || !testimonials) {
     return <div className="w-full h-full flex justify-center items-center">Loading...</div>;

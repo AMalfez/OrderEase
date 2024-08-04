@@ -17,7 +17,7 @@ export default function RootLayout({
             <h1 className="text-3xl font-semibold">Menu</h1>
             <p className="text-neutral-400 text-xl">Manage you restaurant menu.</p>
         </div>
-        <div className="flex h-full mx-12 gap-2 px-3">
+        <div className="flex h-full w-full mx-12 gap-2 px-3">
             {children}
         </div>
     </div>
