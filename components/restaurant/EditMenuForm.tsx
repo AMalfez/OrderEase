@@ -17,24 +17,24 @@ import { usePathname } from "next/navigation";
 import { MenuSchema } from "@/lib/utils/validation/MenuForm";
 import { isBase64Image } from "@/lib/utils/Utilities";
 import { useUploadThing } from "@/lib/utils/validation/uploadthing";
-import { AddItemToMenu } from "@/lib/actions/MenuActions";
+import { EditItemById } from "@/lib/actions/MenuActions";
 import { Label } from "@/components/ui/label"
 
-const CreateMenuForm = () => {
+const EditMenuForm = ({data}:any) => {
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [tempQuantity, setTemp] = useState("");
-  const [available_quatities, setAvailable] = useState<String[]>([]);
+  const [available_quatities, setAvailable] = useState<String[]>(data.available_quantities);
   const { startUpload } = useUploadThing("media");
   const [files, setFiles] = useState<File[]>([]);
   const form = useForm({
     resolver: yupResolver(MenuSchema),
     defaultValues: {
-      category: "",
-      image: "",
-      price: 0,
-      quantity_per_price: "",
-      name: "",
+      category: data.category,
+      image: data.image,
+      price: data.price,
+      quantity_per_price: data.quantity_per_price,
+      name: data.name,
     },
   });
   const deleteQuantity=(ind:number)=>{
@@ -59,7 +59,7 @@ const CreateMenuForm = () => {
     }
 
     try {
-      await AddItemToMenu({...data, available_quatities, pathname});
+      await EditItemById(data.id,{...data});
       window.location.reload();
     } catch (error:any) {
       alert(error);
@@ -191,11 +191,11 @@ const CreateMenuForm = () => {
             className="w-full bg-orange-500 hover:bg-orange-600"
             type={loading?"button":"submit"}
           >
-            {loading?"Loading...":"Add to my menu"}
+            {loading?"Loading...":"Update Item"}
           </Button>
         </form>
       </div>
     </Form>
   );
 };
-export default CreateMenuForm;
+export default EditMenuForm;

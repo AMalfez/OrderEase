@@ -13,7 +13,7 @@ export const AddItemToMenu = async(data:any)=>{
     try {
         const addItem = await prisma.item.create({
             data:{
-                available_quantities:data.available_quantities,
+                available_quantities:data.available_quatities,
                 category: data.category,
                 image: data.image,
                 name: data.name,
@@ -26,6 +26,8 @@ export const AddItemToMenu = async(data:any)=>{
                 }
             },
         })
+        console.log(data);
+        
         if(data.pathname==="/restaurant/dashboard/menu") revalidatePath(`${data.pathname}`);
         return addItem;
     } catch (error:any) {
@@ -64,5 +66,36 @@ export const GetMenuOfRestaurantByRestaurantId = async(id:string)=>{
         console.log(error);
         
         throw new Error("Can't fetch the Menu. Please contact team.")
+    }
+}
+
+export const DeleteMenuItemById = async(id:string)=>{
+    try {
+        const menu = await prisma.item.delete({
+            where:{
+                id
+            }
+        })
+        return menu;
+    } catch (error:any) {
+        throw new Error("Error Deleting Item.");
+    }
+}
+
+export const EditItemById = async(id:string, data:any)=>{
+    try {
+        const item = await prisma.item.update({
+            where:{id:id},
+            data:{
+                ...data,
+                price: data.price+"",
+                available_quantities:data.available_quatities,
+            }
+        })
+        return item;
+    } catch (error:any) {
+        console.log(error);
+        
+        throw new Error("Can't edit item currently.")
     }
 }

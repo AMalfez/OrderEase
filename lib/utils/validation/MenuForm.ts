@@ -6,5 +6,4 @@ export const MenuSchema = yup.object({
     category: yup.string().min(3, "Should be more than 3 characters").nonNullable("This field is required."),
     price: yup.number().nonNullable("This field is required."),
     quantity_per_price: yup.string().nonNullable("This field is required."),
-    available_quantities: yup.string().nonNullable("This field is required.")
 })

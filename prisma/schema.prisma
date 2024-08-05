@@ -63,7 +63,7 @@ model Item {
   category             String
   price                String
   quantity_per_price   String
-  available_quantities String
+  available_quantities String[]
   Orders               Order[]    @relation(fields: [OrderIds], references: [id])
   OrderIds             String[]   @db.ObjectId
 }
