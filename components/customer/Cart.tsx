@@ -10,18 +10,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "../ui/button";
 import { Trash2 } from "lucide-react";
 
 const invoices = [
   {
     dish: "Chicken curry",
     quantity: "3 half",
+    order_quantity: "5",
     totalAmount: "₹100.00",
   },
   {
     dish: "Roti",
     quantity: "2",
+    order_quantity: "5",
     totalAmount: "₹100.00",
   },
 ];
@@ -36,6 +37,7 @@ const Cart = () => {
           <TableRow className="p-0 m-0">
             <TableHead className="w-1/3">Dish</TableHead>
             <TableHead className="w-1/3">Quantity</TableHead>
+            <TableHead className="w-1/3">Order Quantity</TableHead>
             <TableHead className="text-right w-full">Amount</TableHead>
             <TableHead className="text-right w-full">Delete</TableHead>
           </TableRow>
@@ -45,6 +47,7 @@ const Cart = () => {
             <TableRow key={ind}>
               <TableCell className="font-medium">{invoice.dish}</TableCell>
               <TableCell>{invoice.quantity}</TableCell>
+              <TableCell>{invoice.order_quantity}</TableCell>
               <TableCell className="text-right">
                 {invoice.totalAmount}
               </TableCell>
@@ -54,8 +57,8 @@ const Cart = () => {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
+            <TableCell colSpan={4}>Total</TableCell>
+            <TableCell className="text-center">$2,500.00</TableCell>
           </TableRow>
         </TableFooter>
       </Table>

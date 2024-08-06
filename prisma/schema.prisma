@@ -34,24 +34,25 @@ model User {
   restaurantId  String     @default("")
   Feedbacks     Feedback[]
   Orders        Order[]
+  Cart          Cart?
 }
 
 model Feedback {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  User          User       @relation(fields: [userId], references: [id])
-  Restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
-  userId        String     @default("") @db.ObjectId
-  restaurantId  String     @default("") @db.ObjectId
-  feedback      String
-  user_name     String
-  user_image    String?
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  User         User       @relation(fields: [userId], references: [id])
+  Restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  userId       String     @default("") @db.ObjectId
+  restaurantId String     @default("") @db.ObjectId
+  feedback     String
+  user_name    String
+  user_image   String?
 }
 
-model Testimonial{
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  restaurantId  String
-  testimonial   String
-  user_name     String
+model Testimonial {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  restaurantId String
+  testimonial  String
+  user_name    String
 }
 
 model Item {
@@ -69,13 +70,27 @@ model Item {
 }
 
 model Order {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  Items        Item[]     @relation(fields: [ItemsIds], references: [id])
-  ItemsIds     String[]   @db.ObjectId
-  Restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-  restaurantId String     @default("") @db.ObjectId
-  quantity     String
-  total_amount String
-  User         User       @relation(fields: [userId], references: [id])
-  userId       String     @db.ObjectId
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  Items          Item[]     @relation(fields: [ItemsIds], references: [id])
+  ItemsIds       String[]   @db.ObjectId
+  Restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId   String     @default("") @db.ObjectId
+  Table_no       String
+  quantity       String
+  order_quantity String
+  Date           DateTime   @default(now())
+  total_amount   String
+  User           User       @relation(fields: [userId], references: [id])
+  userId         String     @db.ObjectId
+  isActive       Boolean    @default(false)
+  Carts          Cart[]     @relation(fields: [CartIds], references: [id])
+  CartIds        String[]   @db.ObjectId
+}
+
+model Cart {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  Orders   Order[]  @relation(fields: [OrderIds], references: [id])
+  OrderIds String[] @db.ObjectId
+  User     User     @relation(fields: [userId], references: [userId])
+  userId   String   @unique
 }

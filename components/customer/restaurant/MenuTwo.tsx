@@ -73,10 +73,10 @@ const MenuTwo = ({ restaurantId }: any) => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectLabel>{m.available_quantities}</SelectLabel>
-                          <SelectItem value="half">Half</SelectItem>
-                          <SelectItem value="quarter">Quarter</SelectItem>
-                          <SelectItem value="full">Full</SelectItem>
+                          <SelectLabel>Quantities</SelectLabel>
+                          {m.available_quantities.map((m:string, ind:number)=>(
+                            <SelectItem value={m} key={ind}>{m}</SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
