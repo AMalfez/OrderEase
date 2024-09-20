@@ -2,10 +2,10 @@
 import { getRestaurantByRestaurantId } from "@/lib/actions/RestaurantActions";
 import { Restaurant } from "@/lib/constants/restaurant";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Review from "./Review";
 import { getTestimonialsByRestId } from "@/lib/actions/TestimonialAction";
+import { TableNumberInput } from "./TableNumberInput";
 
 const Description = ({ slug, userId }: any) => {
   const [restaurant, setRestaurant] = useState<any | undefined>(
@@ -32,10 +32,7 @@ const Description = ({ slug, userId }: any) => {
       alert(error)
     }
   }
-  const router = useRouter();
-  const createOrder = () => {
-    router.push(`/restaurant/${slug}/createOrder/${userId}/${slug}`);
-  };
+  
   if (!restaurant || !testimonials) {
     return <div className="w-full h-full flex justify-center items-center">Loading...</div>;
   }
@@ -165,12 +162,8 @@ const Description = ({ slug, userId }: any) => {
             </p>
             <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5"></div>
             <div className="flex justify-start items-start">
-              <button
-                onClick={() => createOrder()}
-                className="flex text-white bg-yellow-500 border-0 py-2 px-6 focus:outline-none hover:bg-yellow-600 rounded"
-              >
-                Create order
-              </button>
+              
+              <TableNumberInput slug={slug} userId={userId}/>
             </div>
           </div>
         </div>

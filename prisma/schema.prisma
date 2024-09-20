@@ -33,8 +33,6 @@ model User {
   onboarded     Boolean    @default(false)
   restaurantId  String     @default("")
   Feedbacks     Feedback[]
-  Orders        Order[]
-  Cart          Cart?
 }
 
 model Feedback {
@@ -65,32 +63,22 @@ model Item {
   price                String
   quantity_per_price   String
   available_quantities String[]
-  Orders               Order[]    @relation(fields: [OrderIds], references: [id])
-  OrderIds             String[]   @db.ObjectId
+  Orders               Order[]    
 }
 
 model Order {
   id             String     @id @default(auto()) @map("_id") @db.ObjectId
-  Items          Item[]     @relation(fields: [ItemsIds], references: [id])
-  ItemsIds       String[]   @db.ObjectId
+  Item           Item     @relation(fields: [ItemsId], references: [id])
+  ItemsId        String   @db.ObjectId
   Restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
   restaurantId   String     @default("") @db.ObjectId
   Table_no       String
-  quantity       String
-  order_quantity String
   Date           DateTime   @default(now())
   total_amount   String
-  User           User       @relation(fields: [userId], references: [id])
-  userId         String     @db.ObjectId
-  isActive       Boolean    @default(false)
-  Carts          Cart[]     @relation(fields: [CartIds], references: [id])
-  CartIds        String[]   @db.ObjectId
+  userId         String     
+  quantity       String
+  isOrderPlaced  Boolean    @default(false)
+  status         String     
 }
 
-model Cart {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  Orders   Order[]  @relation(fields: [OrderIds], references: [id])
-  OrderIds String[] @db.ObjectId
-  User     User     @relation(fields: [userId], references: [userId])
-  userId   String   @unique
-}
+

@@ -8,38 +8,18 @@ export const GetCartByUserId=async()=>{
     const user = await currentUser();
     if(!user) redirect("/sign-in");
     try{
-        const cart = await prisma.cart.findUnique({
+        const cart = await prisma.order.findMany({
             where:{
-                userId:user.id
+                userId:user.id,
+                isOrderPlaced:false
             },
             include:{
-                Orders: {
-                    include: {
-                        Items: true,
-                        Restaurant:true
-                    }
-                }
+                Item: true,
+                Restaurant: true
             }
         })
         return cart;
     }catch(error:any){
         throw new Error("An error occured fetching your cart details. Please contact the team.")
-    }
-}
-
-export const AddItemToCart = async(data:any)=>{
-    const user = await currentUser();
-    if(!user) redirect("sign-in");
-    try {
-        const isAlreadyCartThere = await prisma.cart.findUnique({
-            where:{
-                userId:user.id
-            }
-        })
-        if(isAlreadyCartThere) {
-            await prisma.cart.update
-        }
-    } catch (error:any) {
-        throw new Error("Can't add items to cart currently due to some technical issue.")
     }
 }

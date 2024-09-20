@@ -5,7 +5,7 @@ import "@uploadthing/react/styles.css";
 
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
-
+import { Toaster } from "@/components/ui/toaster"
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -30,6 +30,7 @@ export default async function RootLayout({
         )}
       >
         {children}
+        <Toaster />
       </body>
       </ClerkProvider>
     </html>
