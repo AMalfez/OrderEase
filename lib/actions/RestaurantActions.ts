@@ -1,9 +1,9 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import prisma from "./prisma";
 import { CreateRestaurantFields } from "../constants/user";
-import { CreateUrl } from "../utils/Utilities";
+import { redirect } from "next/navigation";
 
 export async function GetRestaurantByUserId(userId: string | undefined) {
   if (!userId) return;
@@ -89,5 +89,37 @@ export async function getRestaurantByRestaurantId(id: string) {
   } catch (error: any) {
     console.log(error);
     throw new Error("An error occured fetching the restaurant.");
+  }
+}
+
+export async function getAllOrderInfoOfRestaurant(){
+    const user = await currentUser();
+    if(!user) redirect("/sign-in");
+    try {
+      const restaurant = await GetRestaurantByUserId(user.id);
+      const orders = await prisma.order.findMany({
+        where:{
+          isOrderPlaced:true,
+          restaurantId:restaurant?.id
+        }
+      })
+      return orders
+    } catch (error:any) {
+      console.log(error);
+      
+      throw new Error("Unable to fetch info. Please contact team at team@orderease.com")
+    }
+}
+
+export async function getTotalRevenueOfRestaurant(){
+  try {
+    const orders = await getAllOrderInfoOfRestaurant();
+    let revenue=0;
+    for(let i=0; i<orders.length; i++){
+      revenue += parseInt(orders[i].total_amount);
+    }
+    return revenue;
+  } catch (error:any) {
+    throw new Error("Unable to fetch revenue. Please contact team at team@orderease.com")
   }
 }

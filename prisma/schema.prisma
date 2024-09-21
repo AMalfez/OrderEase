@@ -33,6 +33,7 @@ model User {
   onboarded     Boolean    @default(false)
   restaurantId  String     @default("")
   Feedbacks     Feedback[]
+  Orders        Order[]
 }
 
 model Feedback {
@@ -75,6 +76,7 @@ model Order {
   Table_no       String
   Date           DateTime   @default(now())
   total_amount   String
+  User           User  @relation(fields: [userId], references: [userId])
   userId         String     
   quantity       String
   isOrderPlaced  Boolean    @default(false)

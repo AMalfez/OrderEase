@@ -14,20 +14,19 @@ import {
 
 export type Payment = {
   id: string;
-  amount: number;
-  status: "unpaid" | "paid";
+  amount: string;
   email: string;
   name: string;
-  bill: "sent" | "not-sent";
-  table_no: number;
-  order_status: "fulfilled" | "not-fulfilled";
+  table_no: string;
+  // order_status: string;
+  quantity:string;
 }
 
 export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: "Status",
+  // },
   {
     accessorKey: "name",
     header: "Name"
@@ -50,13 +49,13 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "table_no",
     header: "Table No."
   },
+  // {
+  //   accessorKey: "order_status",
+  //   header: "Order Status"
+  // },
   {
-    accessorKey: "bill",
-    header: "Bill"
-  },
-  {
-    accessorKey: "order_status",
-    header: "Order Status"
+    accessorKey: "quantity",
+    header: "Quantity"
   },
   {
     accessorKey: "amount",

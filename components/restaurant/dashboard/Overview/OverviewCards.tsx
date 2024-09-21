@@ -1,3 +1,4 @@
+"use client"
 import {
   Card,
   CardContent,
@@ -6,18 +7,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getTotalRevenueOfRestaurant } from "@/lib/actions/RestaurantActions";
+import { useEffect, useState } from "react";
 
 const OverviewCards = () => {
+  const [totalRevenue, setRevenue] = useState<number>(0);
+  const [loading,setLoading] = useState(false);
+  useEffect(()=>{
+    GetCardsInfo();
+  },[])
+  const GetCardsInfo = async()=>{
+    try {
+      setLoading(true);
+      const totalRev = await getTotalRevenueOfRestaurant();
+      setRevenue(totalRev);
+      setLoading(false);
+    } catch (error:any) {
+      alert(error);
+    }
+  }
   return (
     <div className="flex flex-col justify-center items-center gap-10 w-full lg:w-fit h-full mt-10 mb-10">
       <Card className="w-full lg:w-96">
         <CardHeader>
-          <CardTitle className="font-normal">Total Revenue</CardTitle>
+          <CardTitle className="font-normal">{loading ? "Loading..." : "Total Revenue"}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="font-bold text-4xl">₹ 100000</p>
-          <p className="text-neutral-500">+20% from last month</p>
-        </CardContent>
+        {!loading && (<CardContent>
+          <p className="font-bold text-4xl">₹ {`${totalRevenue}`}</p>
+          {/* <p className="text-neutral-500">+20% from last month</p> */}
+        </CardContent>)}
       </Card>
       <Card className="w-full lg:w-96">
         <CardHeader>

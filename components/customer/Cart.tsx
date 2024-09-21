@@ -3,7 +3,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -11,29 +10,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { GetCartByUserId } from "@/lib/actions/CartActions";
-import { deleteOrderByOrderId } from "@/lib/actions/OrderActions";
+import { deleteOrderByOrderId, placeOrder } from "@/lib/actions/OrderActions";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const invoices = [
-  {
-    dish: "Chicken curry",
-    quantity: "3 half",
-    order_quantity: "5",
-    totalAmount: "₹100.00",
-  },
-  {
-    dish: "Roti",
-    quantity: "2",
-    order_quantity: "5",
-    totalAmount: "₹100.00",
-  },
-];
+import PayButton from "./PayButton";
+// import { useToast } from "@/components/ui/use-toast";
+// import { ToastAction } from "@radix-ui/react-toast";
 
 const Cart = () => {
   const [loading, setLoading] = useState(false);
   const [Cart, setCart] = useState<any>([]);
   const [total_price, setTotalPrice] = useState<any>("0");
+  // const { toast } = useToast();
   useEffect(() => {
     GetCart();
   }, []);
@@ -69,17 +57,24 @@ const Cart = () => {
       alert("An error occured deleting your item.");
     }
   }
+  const PlaceOrder = async()=>{
+    try {
+      await placeOrder(Cart[0].userId,Cart[0].Restaurant.id);
+      window.location.reload
+    } catch (error:any) {
+      throw new Error("An error occured placing your order.")
+    }
+  }
   return (
     <div className="w-11/12 md:w-10/12 border mt-10 p-7 rounded-xl">
-      <h1 className="text-2xl font-semibold">Desi Tadka</h1>
+      <h1 className="text-2xl font-semibold">Your cart</h1>
       {!loading ? (
         <Table>
-          <TableCaption>Your order from Desi Tadka.</TableCaption>
           <TableHeader>
             <TableRow className="p-0 m-0">
               <TableHead className="w-1/3">Dish</TableHead>
               <TableHead className="w-1/3">Quantity</TableHead>
-              {/* <TableHead className="w-1/3">Order Quantity</TableHead> */}
+              <TableHead className="w-1/3">Restaurant</TableHead>
               <TableHead className="text-right w-full">Amount</TableHead>
               <TableHead className="text-right w-full">Delete</TableHead>
             </TableRow>
@@ -89,7 +84,7 @@ const Cart = () => {
               <TableRow key={ind}>
                 <TableCell className="font-medium">{invoice.Item.name}</TableCell>
                 <TableCell>{invoice.quantity}</TableCell>
-                {/* <TableCell>{invoice.order_quantity}</TableCell> */}
+                <TableCell>{invoice.Restaurant.restaurant_name}</TableCell>
                 <TableCell className="text-right">
                   {invoice.total_amount}
                 </TableCell>
@@ -111,6 +106,7 @@ const Cart = () => {
       ) : (
         "Loading..."
       )}
+      {Cart.length>0 && (<PayButton PlaceOrder={PlaceOrder} setCart={setCart} setTotalPrice={setTotalPrice} />)}
     </div>
   );
 };
