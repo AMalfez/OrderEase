@@ -9,10 +9,27 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { DatePickerWithRange } from "./RangePicker"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from "react"
+import { createOffer } from "@/lib/actions/OfferActions"
 
 export function CreateOffer() {
+  const [loading, setLoading] = useState<any>(false);
+  const [data, setData] = useState<any>({
+    Title:"",
+    Description:"",
+  })
+  const handleSubmit = async()=>{
+    if(loading) return;
+    try {
+      setLoading(true);
+      await createOffer(data);
+      setLoading(true);
+      window.location.reload();
+    } catch (error:any) {
+      alert("An error occured creating your offer.")
+    }
+  }
   return (
       <DialogContent className="w-fit">
         <DialogHeader>
@@ -30,6 +47,8 @@ export function CreateOffer() {
               id="title"
               placeholder="Type a catchy line EX: Get a Lip smacking taste at mind smacking price."
               className="col-span-3"
+              value={data.Title}
+              onChange={(e:any)=> setData({...data, Title:e.target.value})}
             />
           </div>
           <div className="flex flex-col items-start gap-1">
@@ -40,13 +59,9 @@ export function CreateOffer() {
               id="desc"
               placeholder="Type a brief desecription of the offer here."
               className="col-span-3"
+              value={data.Description}
+              onChange={(e:any)=>setData({...data, Description:e.target.value})}
             />
-          </div>
-          <div className="flex flex-col items-start gap-1">
-            <Label htmlFor="start_date" className="text-right">
-              Start & End Date
-            </Label>
-            <DatePickerWithRange/>
           </div>
           <div className="flex items-center space-x-2">
           <Checkbox id="notify" />
@@ -59,7 +74,7 @@ export function CreateOffer() {
         </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button onClick={handleSubmit} type="submit">{!loading ? "Save changes":"Loading..."}</Button>
         </DialogFooter>
       </DialogContent>
   )

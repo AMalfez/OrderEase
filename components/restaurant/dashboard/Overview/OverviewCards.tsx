@@ -11,7 +11,7 @@ import { getTotalRevenueOfRestaurant } from "@/lib/actions/RestaurantActions";
 import { useEffect, useState } from "react";
 
 const OverviewCards = () => {
-  const [totalRevenue, setRevenue] = useState<number>(0);
+  const [totalRevenue, setRevenue] = useState<number|undefined>(undefined);
   const [loading,setLoading] = useState(false);
   useEffect(()=>{
     GetCardsInfo();
@@ -33,7 +33,7 @@ const OverviewCards = () => {
           <CardTitle className="font-normal">{loading ? "Loading..." : "Total Revenue"}</CardTitle>
         </CardHeader>
         {!loading && (<CardContent>
-          <p className="font-bold text-4xl">₹ {`${totalRevenue}`}</p>
+          {totalRevenue &&(<p className="font-bold text-4xl">₹ {`${totalRevenue}`}</p>)}
           {/* <p className="text-neutral-500">+20% from last month</p> */}
         </CardContent>)}
       </Card>

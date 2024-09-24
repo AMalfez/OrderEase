@@ -10,11 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
+import { MoreHorizontal } from "lucide-react";
+import { deleteOfferByOfferId } from "@/lib/actions/OfferActions";
 export type Offer = { 
+    id:string;
     title: string;
     start_date: string;
-    end_date: string;
     desc: string;
 }
 
@@ -24,15 +25,42 @@ export const columns: ColumnDef<Offer>[] = [
         header: "Title"
     },
     {
-        accessorKey: "start_date",
-        header: "Start Date"
-    },
-    {
-        accessorKey: "end_date",
-        header: "End Date"
+        accessorKey:"start_date",
+        header: "Created At"
     },
     {
         accessorKey: "desc",
         header: "Description"
-    }
+    }, 
+    {
+        id: "actions",
+        cell: ({ row }) => {
+          const OfferId = row.original.id;
+          const DleteOffer = async()=>{
+            try {
+              await deleteOfferByOfferId(OfferId);
+              window.location.reload();
+            } catch (error:any) {
+              alert("unable to delete offer due to an error.")
+              console.log(error);
+            }
+          }
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>View Offer</DropdownMenuItem>
+                <DropdownMenuItem onClick={DleteOffer}>Delete Offer</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )
+        },
+      },
 ]

@@ -21,6 +21,7 @@ model Restaurant {
   Menu             Item[]
   Feedbacks        Feedback[]
   Orders           Order[]
+  Offers           Offer[]
 }
 
 model User {
@@ -81,6 +82,15 @@ model Order {
   quantity       String
   isOrderPlaced  Boolean    @default(false)
   status         String     
+}
+
+model Offer{
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  Title          String
+  Description    String
+  Restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId   String     @default("") @db.ObjectId
+  createdAt      DateTime   @default(now()) 
 }
 
 
