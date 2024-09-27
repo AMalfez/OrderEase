@@ -17,6 +17,9 @@ export type Offer = {
     title: string;
     start_date: string;
     desc: string;
+    offer_code: string;
+    min_price_limit: string;
+    discount:string;
 }
 
 export const columns: ColumnDef<Offer>[] = [
@@ -31,7 +34,19 @@ export const columns: ColumnDef<Offer>[] = [
     {
         accessorKey: "desc",
         header: "Description"
-    }, 
+    },
+    {
+      accessorKey: "offer_code",
+      header: "Offer Code"
+  }, 
+  {
+    accessorKey: "min_price_limit",
+    header: "Min. price"
+},
+{
+  accessorKey: "discount",
+  header: "Discount"
+},
     {
         id: "actions",
         cell: ({ row }) => {

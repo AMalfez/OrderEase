@@ -19,8 +19,11 @@ export const Offers = ()=>{
                 data.push({
                     id:offer[i].id,
                     title: TrimStringToDotted(offer[i].Title,0,20),
-                    desc: TrimStringToDotted(offer[i].Description,0,80),
-                    start_date:`${new Date(offer[i].createdAt).toLocaleDateString()}`
+                    desc: TrimStringToDotted(offer[i].Description,0,50),
+                    start_date:`${new Date(offer[i].createdAt).toLocaleDateString()}`,
+                    offer_code: offer[i].OfferCode,
+                    min_price_limit:offer[i].MinLimit,
+                    discount:offer[i].Discount+"%"
                 })
             }
             setData(data);

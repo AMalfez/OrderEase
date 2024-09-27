@@ -14,6 +14,9 @@ export const createOffer = async(data:any)=>{
             data:{
                 Description:data.Description,
                 Title:data.Title,
+                OfferCode:data.OfferCode,
+                MinLimit:data.MinLimit+"",
+                Discount:""+data.Discount,
                 Restaurant:{
                     connect:{
                         id:restaurant?.id

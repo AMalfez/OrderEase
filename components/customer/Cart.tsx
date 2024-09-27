@@ -106,6 +106,10 @@ const Cart = () => {
       ) : (
         "Loading..."
       )}
+      <div className="mt-5">
+        <input placeholder="Input discount code" className="rounded-lg outline-none px-3 py-1 bg-gray-100" />
+        <button className="px-3 py-1 ml-2 rounded-lg bg-black text-white">Apply</button>
+      </div>
       {Cart.length>0 && (<PayButton PlaceOrder={PlaceOrder} setCart={setCart} setTotalPrice={setTotalPrice} />)}
     </div>
   );
