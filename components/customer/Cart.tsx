@@ -14,6 +14,7 @@ import { deleteOrderByOrderId, placeOrder } from "@/lib/actions/OrderActions";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import PayButton from "./PayButton";
+import { getOffersByRestaurantId } from "@/lib/actions/OfferActions";
 // import { useToast } from "@/components/ui/use-toast";
 // import { ToastAction } from "@radix-ui/react-toast";
 
@@ -21,14 +22,37 @@ const Cart = () => {
   const [loading, setLoading] = useState(false);
   const [Cart, setCart] = useState<any>([]);
   const [total_price, setTotalPrice] = useState<any>("0");
-  // const { toast } = useToast();
+  const [offer,setOffer] = useState<any>([]);
+  const [offerCode, setOfferCode] = useState("");
+  const [isOfferApplied,setIsOfferApplied] = useState(false);
+  
   useEffect(() => {
+    setIsOfferApplied(false);
+    setOfferCode("");
+    setOffer([]);
     GetCart();
   }, []);
+  const handleOffer = ()=>{
+    const filtered_offer = offer.filter((o:any) => o.OfferCode === offerCode);
+    if(filtered_offer.length === 0) {
+      setOfferCode("");
+      alert("No such offer exists.")
+    }else if(filtered_offer[0].MinLimit > total_price){
+      alert(`please add ${filtered_offer[0].MinLimit - total_price} rupees worth of more items to claim offer.`)
+    }else{
+      setTotalPrice(total_price*(1-(parseInt(filtered_offer[0].Discount)/100)));
+      setOfferCode("");
+      setIsOfferApplied(true);
+      setOffer([]);
+      alert("Offer applied successfully.");
+    }
+  }
   const GetCart = async () => {
     try {
       setLoading(true);
       const cart = await GetCartByUserId();
+      const offers = await getOffersByRestaurantId(cart[0].Restaurant.id);
+      setOffer(offers);
       console.log(cart);
       let total=0;
       for(let i=0; i<cart.length; i++){
@@ -99,7 +123,7 @@ const Cart = () => {
           <TableFooter>
             <TableRow>
               <TableCell colSpan={4}>Total</TableCell>
-              <TableCell className="text-center">${total_price}.00</TableCell>
+              <TableCell className={`text-center ${isOfferApplied ? "text-green-500":"text-black"}`}>${total_price}.00</TableCell>
             </TableRow>
           </TableFooter>
         </Table>
@@ -107,8 +131,8 @@ const Cart = () => {
         "Loading..."
       )}
       <div className="mt-5">
-        <input placeholder="Input discount code" className="rounded-lg outline-none px-3 py-1 bg-gray-100" />
-        <button className="px-3 py-1 ml-2 rounded-lg bg-black text-white">Apply</button>
+        <input value={offerCode} onChange={(e:any)=>setOfferCode(e.target.value)} placeholder="Input discount code" className="rounded-lg outline-none px-3 py-1 bg-gray-100" />
+        <button onClick={handleOffer} className="px-3 py-1 ml-2 rounded-lg bg-black text-white">Apply</button>
       </div>
       {Cart.length>0 && (<PayButton PlaceOrder={PlaceOrder} setCart={setCart} setTotalPrice={setTotalPrice} />)}
     </div>

@@ -10,6 +10,13 @@ export const createOffer = async(data:any)=>{
     if(!user) redirect("/sign-in");
     try {
         const restaurant = await GetRestaurantByUserId(user.id);
+        const isOfferExist = await prisma.offer.findMany({
+            where:{
+                restaurantId:restaurant?.id,
+                OfferCode: data.OfferCode
+            }
+        });
+        if(isOfferExist.length>0) throw new Error("An offer with this code already exist for your restaurant. please change the name.")
         const offer = await prisma.offer.create({
             data:{
                 Description:data.Description,
@@ -41,17 +48,26 @@ export const getAllOffers = async()=>{
     }
 }
 
-export const getOffersByRestaurantId = async()=>{
+export const getOffersByRestaurantId = async(restaurantId:string|undefined)=>{
     const user = await currentUser();
     if(!user) redirect("/sign-in");
     try {
-        const restaurant = await GetRestaurantByUserId(user.id);
-        const offer = await prisma.offer.findMany({
-            where:{
-                restaurantId:restaurant?.id
-            }
-        })
-        return offer;
+        if(!restaurantId){
+            const restaurant = await GetRestaurantByUserId(user.id);
+            const offer = await prisma.offer.findMany({
+                where:{
+                    restaurantId:restaurant?.id
+                }
+            })
+            return offer;
+        } else {
+            const offer = await prisma.offer.findMany({
+                where:{
+                    restaurantId:restaurantId
+                }
+            })
+            return offer;
+        }
     } catch (error:any) {
         console.log(error);
         throw new Error("Unable to create offer.");

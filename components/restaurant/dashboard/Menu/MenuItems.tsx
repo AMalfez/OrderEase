@@ -5,12 +5,10 @@ import {
     SelectContent,
     SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
 import Image from "next/image";
-import { Pen } from "lucide-react";
 import { DeleteMenuItemById } from "@/lib/actions/MenuActions";
 import EditItemButton from "./EditItemButton";
 const MenuItems = ({data}:any)=>{

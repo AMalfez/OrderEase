@@ -94,10 +94,10 @@ const HomeCarousel = ({userId}:any) => {
                         <FaStar key={ind} className="text-amber-400" />
                       ))}
                       {Array.from({ length: Math.ceil(parseInt(r.rating) - Math.floor(parseInt(r.rating)))+1 }).map((_, ind) => (
-                        <FaStarHalfAlt className="text-amber-400" />
+                        <FaStarHalfAlt key={ind} className="text-amber-400" />
                       ))}
                       {Array.from({length: 4 - Math.ceil(parseInt(r.rating))}).map((_,ind)=>(
-                        <FaRegStar className="text-amber-400" />
+                        <FaRegStar key={ind} className="text-amber-400" />
                       ))}
                     </p>
                   </CardFooter>

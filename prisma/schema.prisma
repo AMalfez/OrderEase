@@ -90,7 +90,7 @@ model Offer{
   Description    String
   Restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
   restaurantId   String     @default("") @db.ObjectId
-  OfferCode      String
+  OfferCode      String     
   MinLimit       String
   Discount       String
   createdAt      DateTime   @default(now()) 

@@ -44,9 +44,9 @@ const HomeCarouselSkeleton = () => {
                     <div className="block md:hidden"><Skeleton className="w-1/2 h-[20px]" /></div>
                   </CardContent>
                   <CardFooter>
-                    <p className="flex justify-center items-center">
+                    <div className="flex justify-center items-center">
                       <span className="mr-1"><Skeleton className="w-[60px] h-[20px]" /></span>
-                    </p>
+                    </div>
                   </CardFooter>
                 </Card>
               </div>
