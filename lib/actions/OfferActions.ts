@@ -33,8 +33,8 @@ export const createOffer = async(data:any)=>{
         })
         return offer;
     } catch (error:any) {
-        console.log(error);
-        throw new Error("Unable to create offer.");
+        // console.log(error);
+        throw new Error(error);
     }
 }
 

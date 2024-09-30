@@ -34,10 +34,13 @@ const Cart = () => {
   }, []);
   const handleOffer = ()=>{
     const filtered_offer = offer.filter((o:any) => o.OfferCode === offerCode);
+    
     if(filtered_offer.length === 0) {
       setOfferCode("");
       alert("No such offer exists.")
-    }else if(filtered_offer[0].MinLimit > total_price){
+    }else if(parseInt(filtered_offer[0].MinLimit) > parseInt(total_price)){
+      console.log("Came here");
+      
       alert(`please add ${filtered_offer[0].MinLimit - total_price} rupees worth of more items to claim offer.`)
     }else{
       setTotalPrice(total_price*(1-(parseInt(filtered_offer[0].Discount)/100)));
@@ -52,6 +55,8 @@ const Cart = () => {
       setLoading(true);
       const cart = await GetCartByUserId();
       const offers = await getOffersByRestaurantId(cart[0].Restaurant.id);
+      console.log(offers);
+      
       setOffer(offers);
       console.log(cart);
       let total=0;

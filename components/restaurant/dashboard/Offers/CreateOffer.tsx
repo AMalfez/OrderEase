@@ -32,10 +32,11 @@ export function CreateOffer() {
     try {
       setLoading(true);
       await createOffer(data);
-      setLoading(true);
       window.location.reload();
     } catch (error: any) {
-      alert("An error occured creating your offer.");
+      alert(error);
+      setLoading(false);
+      return;
     }
   };
 
