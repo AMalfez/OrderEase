@@ -6,11 +6,13 @@ import { CreateRestaurantFields } from "../constants/user";
 import { redirect } from "next/navigation";
 
 export async function GetRestaurantByUserId(userId: string | undefined) {
-  if (!userId) return;
+  let user = await currentUser();
+  if(!user) redirect("/sign-in");
+  
   try {
     const rest = await prisma.restaurant.findUnique({
       where: {
-        ownerId: userId,
+        ownerId: userId ? userId:user.id,
       },
     });
     if (!rest) throw new Error("There is no restaurant with this owner.");
@@ -121,5 +123,24 @@ export async function getTotalRevenueOfRestaurant(){
     return revenue;
   } catch (error:any) {
     throw new Error("Unable to fetch revenue. Please contact team at team@orderease.com")
+  }
+}
+
+export const updateRestaurantInfoByUserId = async(data:any)=>{
+  const user = await currentUser();
+  if(!user) redirect("/sign-in");
+  try {
+    const update = await prisma.restaurant.update({
+      where:{
+        ownerId:user.id
+      },
+      data:{
+        ...data
+      }
+    })
+    return update;
+  } catch (error:any) {
+    console.log(error);
+    throw new Error("Can't update restaurant info at this moment.")
   }
 }
