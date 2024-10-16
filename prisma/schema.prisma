@@ -96,4 +96,13 @@ model Offer{
   createdAt      DateTime   @default(now()) 
 }
 
+model Payment {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  amount        String      
+  to_userId     String
+  from_userId   String
+  createdAt     DateTime @default(now())
+  status        String
+}
+
 

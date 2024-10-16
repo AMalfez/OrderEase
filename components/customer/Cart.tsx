@@ -9,14 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import React from 'react'
+import Script from "next/script";
 import { GetCartByUserId } from "@/lib/actions/CartActions";
 import { deleteOrderByOrderId, placeOrder } from "@/lib/actions/OrderActions";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import PayButton from "./PayButton";
 import { getOffersByRestaurantId } from "@/lib/actions/OfferActions";
-// import { useToast } from "@/components/ui/use-toast";
-// import { ToastAction } from "@radix-ui/react-toast";
+import { InitiatePayment } from "@/lib/actions/PaymentActions";
+import Razorpay from "razorpay"; //idk this should be included or not
 
 const Cart = () => {
   const [loading, setLoading] = useState(false);
@@ -94,7 +97,35 @@ const Cart = () => {
       throw new Error("An error occured placing your order.")
     }
   }
+  const pay = async()=>{
+    try {
+      const initiate = await InitiatePayment({amount:total_price,to_userId:Cart[0].Restaurant.ownerId});
+      const orderId:string = initiate.id;
+      var options:any = {
+        "key": `${process.env.RAZORPAY_KEY_ID}`, 
+        "amount": total_price+"00", 
+        "currency": "INR",
+        "name": Cart[0].Restaurant.restaurant_name, 
+        "description": "Test Transaction",
+        "image": Cart[0].Restaurant.restaurant_image,
+        "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "callback_url": `${process.env.BASE_URL}/api/razorpay`,
+        "notes": {
+            "address": Cart[0].Restaurant.address
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+      }
+      var rzp1:any = new Razorpay(options);
+      rzp1.open();
+    } catch (error:any) {
+      alert(error);
+    }
+  }
   return (
+    <>
+    <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
     <div className="w-11/12 md:w-10/12 border mt-10 p-7 rounded-xl">
       <h1 className="text-2xl font-semibold">Your cart</h1>
       {!loading ? (
@@ -141,6 +172,7 @@ const Cart = () => {
       </div>
       {Cart.length>0 && (<PayButton PlaceOrder={PlaceOrder} setCart={setCart} setTotalPrice={setTotalPrice} />)}
     </div>
+    </>
   );
 };
 export default Cart;
