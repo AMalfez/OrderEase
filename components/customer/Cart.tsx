@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import axios from 'axios';
 import React from 'react'
 import Script from "next/script";
 import { GetCartByUserId } from "@/lib/actions/CartActions";
@@ -18,8 +18,8 @@ import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import PayButton from "./PayButton";
 import { getOffersByRestaurantId } from "@/lib/actions/OfferActions";
-import { InitiatePayment } from "@/lib/actions/PaymentActions";
-import Razorpay from "razorpay"; //idk this should be included or not
+import { InitiatePayment, VerifyPayment } from "@/lib/actions/PaymentActions";
+// import Razorpay from "razorpay"; //idk this should be included or not
 
 const Cart = () => {
   const [loading, setLoading] = useState(false);
@@ -92,7 +92,7 @@ const Cart = () => {
   const PlaceOrder = async()=>{
     try {
       await placeOrder(Cart[0].userId,Cart[0].Restaurant.id);
-      window.location.reload
+      window.location.reload;
     } catch (error:any) {
       throw new Error("An error occured placing your order.")
     }
@@ -102,24 +102,40 @@ const Cart = () => {
       const initiate = await InitiatePayment({amount:total_price,to_userId:Cart[0].Restaurant.ownerId});
       const orderId:string = initiate.id;
       var options:any = {
-        "key": `${process.env.RAZORPAY_KEY_ID}`, 
+        "key": process.env.RAZORPAY_KEY_ID, 
         "amount": total_price+"00", 
         "currency": "INR",
         "name": Cart[0].Restaurant.restaurant_name, 
         "description": "Test Transaction",
         "image": Cart[0].Restaurant.restaurant_image,
-        "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "callback_url": `${process.env.BASE_URL}/api/razorpay`,
+        "order_id": orderId, 
+        "handler": async function (response:any){
+          // alert(response.razorpay_payment_id);
+          // alert(response.razorpay_order_id);
+          // alert(response.razorpay_signature)
+          try {
+            const verify = await VerifyPayment({...response});
+            if(verify) await PlaceOrder(); 
+          } catch (error:any) {
+            alert(error);
+          }
+        },
         "notes": {
             "address": Cart[0].Restaurant.address
         },
         "theme": {
-            "color": "#3399cc"
+            "color": "#FFA500"
         }
       }
       var rzp1:any = new Razorpay(options);
       rzp1.open();
+      rzp1.on('payment.failed', function (response:any){
+        console.log(response.error);
+        alert("Can't complete your payment.");
+      })
     } catch (error:any) {
+      console.log(error);
+      
       alert(error);
     }
   }
@@ -170,7 +186,7 @@ const Cart = () => {
         <input value={offerCode} onChange={(e:any)=>setOfferCode(e.target.value)} placeholder="Input discount code" className="rounded-lg outline-none px-3 py-1 bg-gray-100" />
         <button onClick={handleOffer} className="px-3 py-1 ml-2 rounded-lg bg-black text-white">Apply</button>
       </div>
-      {Cart.length>0 && (<PayButton PlaceOrder={PlaceOrder} setCart={setCart} setTotalPrice={setTotalPrice} />)}
+      {Cart.length>0 && (<PayButton Pay={pay} setCart={setCart} setTotalPrice={setTotalPrice} />)}
     </div>
     </>
   );

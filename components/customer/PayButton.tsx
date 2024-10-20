@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { set } from "date-fns";
-const PayButton = ({PlaceOrder, setCart, setTotalPrice}:any)=>{
+
+const PayButton = ({Pay, setCart, setTotalPrice}:any)=>{
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
-    // const HandlePayment=()=>{}
+    
     const HandleClick = async()=>{
         setLoading(true);
-        await PlaceOrder();
+        await Pay();
+        // await PlaceOrder();
         setCart([]);
         setLoading(false);
         setTotalPrice("0");
