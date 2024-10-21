@@ -43,19 +43,17 @@ const Cart = () => {
       setOfferCode("");
       toast({
         description: "No such offer exists.",
-      })
+      });
     } else if (parseInt(filtered_offer[0].MinLimit) > parseInt(total_price)) {
       console.log("Came here");
 
-      alert(
-        
-      );
+      alert();
       toast({
         title: "Amount not satisfied.",
         description: `please add ${
           filtered_offer[0].MinLimit - total_price
         } rupees worth of more items to claim offer.`,
-      })
+      });
     } else {
       setTotalPrice(
         total_price * (1 - parseInt(filtered_offer[0].Discount) / 100)
@@ -64,8 +62,8 @@ const Cart = () => {
       setIsOfferApplied(true);
       setOffer([]);
       toast({
-        description:"Offer successfully applied."
-      })
+        description: "Offer successfully applied.",
+      });
     }
   };
   const GetCart = async () => {
@@ -92,7 +90,7 @@ const Cart = () => {
       toast({
         title: "Error.",
         description: "An error occured while fetching your cart details.",
-      })
+      });
     }
   };
   const DeleteCartItem = async (orderId: string) => {
@@ -112,7 +110,7 @@ const Cart = () => {
       toast({
         title: "Error.",
         description: "An error occured deleting your item.",
-      })
+      });
     }
   };
   const PlaceOrder = async () => {
@@ -120,13 +118,12 @@ const Cart = () => {
       await placeOrder(Cart[0].userId, Cart[0].Restaurant.id);
       setCart([]);
       setTotalPrice("0");
-      
     } catch (error: any) {
       console.log(error);
       toast({
         title: "Error.",
         description: "An error occured placing your item.",
-      })
+      });
     }
   };
   const pay = async () => {
@@ -158,26 +155,29 @@ const Cart = () => {
           color: "#FFA500",
         },
       };
-      var rzp1: any = new Razorpay(options);
+      var rzp1: any = new window.Razorpay(options);
       rzp1.open();
       rzp1.on("payment.failed", function (response: any) {
         console.log(response.error);
         toast({
           title: "Error.",
           description: "Can't complete your payment.",
-        })
+        });
       });
     } catch (error: any) {
       console.log(error);
       toast({
         title: "Error.",
         description: error,
-      })
+      });
     }
   };
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
+      <Script
+        id="razorpay-checkout-js"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      />
       <div className="w-11/12 md:w-10/12 border mt-10 p-7 rounded-xl">
         <h1 className="text-2xl font-semibold">Your cart</h1>
         {!loading ? (
