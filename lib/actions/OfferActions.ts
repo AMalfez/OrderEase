@@ -48,11 +48,11 @@ export const getAllOffers = async()=>{
     }
 }
 
-export const getOffersByRestaurantId = async()=>{
+export const getOffersByRestaurantId = async(restaurantId:string)=>{
     const user = await currentUser();
     if(!user) redirect("/sign-in");
     try {
-        // if(!restaurantId){
+        if(restaurantId===""){
             const restaurant = await GetRestaurantByUserId(user.id);
             const offer = await prisma.offer.findMany({
                 where:{
@@ -60,14 +60,14 @@ export const getOffersByRestaurantId = async()=>{
                 }
             })
             return offer;
-        // } else {
-        //     const offer = await prisma.offer.findMany({
-        //         where:{
-        //             restaurantId:restaurantId
-        //         }
-        //     })
-        //     return offer;
-        // }
+        } else {
+            const offer = await prisma.offer.findMany({
+                where:{
+                    restaurantId:restaurantId
+                }
+            })
+            return offer;
+        }
     } catch (error:any) {
         console.log(error);
         throw new Error("Unable to create offer.");
