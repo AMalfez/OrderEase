@@ -120,7 +120,7 @@ const Cart = () => {
       await placeOrder(Cart[0].userId, Cart[0].Restaurant.id);
       setCart([]);
       setTotalPrice("0");
-      window.location.reload;
+      
     } catch (error: any) {
       console.log(error);
       toast({

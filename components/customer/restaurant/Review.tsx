@@ -6,9 +6,9 @@ const Review = ({testimonials}:any) => {
         Testimonials
       </h1>
       <div className="container px-5 py-24 mx-auto">
-        <div className="flex flex-wrap -m-4">
+        <div className="flex items-center flex-wrap -m-4">
           {testimonials.map((t:any, ind:number) => (
-            <div key={ind} className="lg:w-1/3 lg:mb-0 mb-6 p-4">
+            <div key={ind} className="lg:w-1/3 lg:mb-0 mb-6 p-4 w-full">
               <div className="h-full text-center">
                 <p className="leading-relaxed">
                   {t.testimonial}.

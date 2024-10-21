@@ -10,7 +10,6 @@ const PayButton = ({Pay, setCart, setTotalPrice}:any)=>{
     const HandleClick = async()=>{
         setLoading(true);
         await Pay();
-        // await PlaceOrder();
         setLoading(false);
         toast({
             title: "Order placed successfully.",
