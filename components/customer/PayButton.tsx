@@ -11,9 +11,7 @@ const PayButton = ({Pay, setCart, setTotalPrice}:any)=>{
         setLoading(true);
         await Pay();
         // await PlaceOrder();
-        setCart([]);
         setLoading(false);
-        setTotalPrice("0");
         toast({
             title: "Order placed successfully.",
             description: "You will recieve order shortly. Please hang on tight. Meanwhile you can explore the menu.",

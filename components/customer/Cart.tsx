@@ -118,6 +118,8 @@ const Cart = () => {
   const PlaceOrder = async () => {
     try {
       await placeOrder(Cart[0].userId, Cart[0].Restaurant.id);
+      setCart([]);
+      setTotalPrice("0");
       window.location.reload;
     } catch (error: any) {
       console.log(error);
@@ -130,7 +132,7 @@ const Cart = () => {
   const pay = async () => {
     try {
       const initiate = await InitiatePayment({
-        amount: total_price,
+        amount: `${total_price}`,
         to_userId: Cart[0].Restaurant.ownerId,
       });
       const orderId: string = initiate.id;
