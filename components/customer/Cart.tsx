@@ -19,9 +19,10 @@ import { useEffect, useState } from "react";
 import PayButton from "./PayButton";
 import { getOffersByRestaurantId } from "@/lib/actions/OfferActions";
 import { InitiatePayment, VerifyPayment } from "@/lib/actions/PaymentActions";
-// import Razorpay from "razorpay"; //idk this should be included or not
+import { useToast } from "@/components/ui/use-toast";
 
 const Cart = () => {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [Cart, setCart] = useState<any>([]);
   const [total_price, setTotalPrice] = useState<any>("0");
@@ -40,15 +41,21 @@ const Cart = () => {
 
     if (filtered_offer.length === 0) {
       setOfferCode("");
-      alert("No such offer exists.");
+      toast({
+        description: "No such offer exists.",
+      })
     } else if (parseInt(filtered_offer[0].MinLimit) > parseInt(total_price)) {
       console.log("Came here");
 
       alert(
-        `please add ${
-          filtered_offer[0].MinLimit - total_price
-        } rupees worth of more items to claim offer.`
+        
       );
+      toast({
+        title: "Amount not satisfied.",
+        description: `please add ${
+          filtered_offer[0].MinLimit - total_price
+        } rupees worth of more items to claim offer.`,
+      })
     } else {
       setTotalPrice(
         total_price * (1 - parseInt(filtered_offer[0].Discount) / 100)
@@ -56,7 +63,9 @@ const Cart = () => {
       setOfferCode("");
       setIsOfferApplied(true);
       setOffer([]);
-      alert("Offer applied successfully.");
+      toast({
+        description:"Offer successfully applied."
+      })
     }
   };
   const GetCart = async () => {
@@ -80,7 +89,10 @@ const Cart = () => {
       setLoading(false);
     } catch (error: any) {
       console.log(error);
-      alert("An error occured fetching your cart.");
+      toast({
+        title: "Error.",
+        description: "An error occured while fetching your cart details.",
+      })
     }
   };
   const DeleteCartItem = async (orderId: string) => {
@@ -96,7 +108,11 @@ const Cart = () => {
       setCart(cart);
       setLoading(false);
     } catch (error: any) {
-      alert("An error occured deleting your item.");
+      console.log(error);
+      toast({
+        title: "Error.",
+        description: "An error occured deleting your item.",
+      })
     }
   };
   const PlaceOrder = async () => {
@@ -104,7 +120,11 @@ const Cart = () => {
       await placeOrder(Cart[0].userId, Cart[0].Restaurant.id);
       window.location.reload;
     } catch (error: any) {
-      throw new Error("An error occured placing your order.");
+      console.log(error);
+      toast({
+        title: "Error.",
+        description: "An error occured placing your item.",
+      })
     }
   };
   const pay = async () => {
@@ -140,12 +160,17 @@ const Cart = () => {
       rzp1.open();
       rzp1.on("payment.failed", function (response: any) {
         console.log(response.error);
-        alert("Can't complete your payment.");
+        toast({
+          title: "Error.",
+          description: "Can't complete your payment.",
+        })
       });
     } catch (error: any) {
       console.log(error);
-
-      alert(error);
+      toast({
+        title: "Error.",
+        description: error,
+      })
     }
   };
   return (
