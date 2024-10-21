@@ -29,18 +29,18 @@ const MenuCard = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const Table_no = searchParams.get('TableNumber')
-  if(!Table_no) return;
   const [number, setNumber] = useState(0);
   const [orderData, setOrderData] = useState<OrderData>({
     isOrderPlaced:false,
     ItemsId:id,
     restaurantId:restaurantId,
     status:"not-placed",
-    Table_no,
+    Table_no:Table_no||"0",
     total_amount:`${price*number}`,
     quantity:`${number}`
   })
   const { toast } = useToast();
+  if(!Table_no) return;
   const handleNum = (s: string) => {
     let num = number;
     if (s === "add") {
