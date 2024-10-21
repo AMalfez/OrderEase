@@ -155,7 +155,7 @@ const Cart = () => {
           color: "#FFA500",
         },
       };
-      var rzp1: any = new window.Razorpay(options);
+      var rzp1: any = new (window as any).Razorpay(options);
       rzp1.open();
       rzp1.on("payment.failed", function (response: any) {
         console.log(response.error);
