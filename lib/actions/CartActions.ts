@@ -20,6 +20,7 @@ export const GetCartByUserId=async()=>{
         })
         return cart;
     }catch(error:any){
+        console.log(error);
         throw new Error("An error occured fetching your cart details. Please contact the team.")
     }
 }
