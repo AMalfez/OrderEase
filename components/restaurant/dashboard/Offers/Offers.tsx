@@ -13,7 +13,7 @@ export const Offers = ()=>{
     const getOfferData = async()=>{
         setLoading(true);
         try {
-            const offer = await getOffersByRestaurantId(undefined);
+            const offer = await getOffersByRestaurantId();
             const data: Offer[] = [];
             for(let i=0; i<offer.length; i++){
                 data.push({
