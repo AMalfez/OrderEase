@@ -98,6 +98,7 @@ model Offer{
 
 model Payment {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  order_id      String      
   amount        String      
   to_userId     String
   from_userId   String
