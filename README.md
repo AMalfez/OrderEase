@@ -1,4 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## OrderEase - Let your restaurant experience be at ease!
+Frustated due to too much rush in your favorate restaurant and you can't enjoy your weekends? Let OrderEase help you out! 
+Pre-book your spot in your favorate restaurant. Also your can order and pay online which makes life much easier.
+![orderease_mobile_views](https://github.com/user-attachments/assets/27c3d7e9-6aef-4f80-a55d-3f1085e87641)
+
+## Tech Stack
+ReactJs
+NextJs
+Tailwind
+Typescript
+Shadcn
+Prisma
+Clerk
 
 ## Getting Started
 
