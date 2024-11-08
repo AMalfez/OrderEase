@@ -2,11 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import {Elements} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
-import CheckoutForm from "./CheckoutForm";
-
-const stripePromise = loadStripe('pk_test_51NHidkSCTsJY5ezVf5fpcafUVIq0ATRMxBUN8905m9fvSNV3jaZ9mbIKS41IFiOKe7zlYtbg2yIqUXFebRAyZShP00vTIBFHnS');
 
 
 const PayButton = ({PlaceOrder, setCart, setTotalPrice}:any)=>{
@@ -44,9 +39,6 @@ const PayButton = ({PlaceOrder, setCart, setTotalPrice}:any)=>{
     }
     return(
         <>
-            {clientSecret&&(<Elements options={{clientSecret}} stripe={stripePromise}>
-                <CheckoutForm />
-            </Elements>)}
             <button className="px-3 py-1 mt-5 rounded-lg cursor-pointer bg-orange-500 hover:bg-orange-600 text-white" onClick={HandleClick}>
                 {loading ? "Loading..." : "Pay now"}
             </button>
