@@ -47,8 +47,8 @@ const NavBar = ({ userId }: any) => {
         <div className="flex gap-5 h-full items-center">
           <LogoLink />
           <div className="hidden md:flex gap-4 text-xl text-gray-600">
-            {navigation.map((n: any) => (
-              <Link href={n.path} className="cursor-pointer hover:text-black">
+            {navigation.map((n: any, ind:any) => (
+              <Link href={n.path} key={ind} className="cursor-pointer hover:text-black">
                 {n.title}
               </Link>
             ))}
@@ -86,8 +86,8 @@ const NavBar = ({ userId }: any) => {
       </div>
       {toggleMenu && (
         <div className="pl-3 flex flex-col md:hidden gap-4 text-xl text-gray-600">
-          {navigation.map((n: any) => (
-            <Link href={n.path} onClick={handleToggle} className="cursor-pointer hover:text-black">
+          {navigation.map((n: any, ind:any) => (
+            <Link key={ind} href={n.path} onClick={handleToggle} className="cursor-pointer hover:text-black">
               {n.title}
             </Link>
           ))}
