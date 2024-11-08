@@ -3,123 +3,117 @@ import { getUserByUserId } from "@/lib/actions/UserActions";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaHamburger } from "react-icons/fa";
+import LogoLink from "./LogoLink";
+import { MdMenu, MdClose } from "react-icons/md";
 
-const NavBar = ({userId}:any) => {
-  const [state, setState] = useState(false);
+const NavBar = ({ userId }: any) => {
+  const [toggleMenu, setToggleMenu] = useState<Boolean>(false);
   const [user, setUser] = useState<any>();
-  const navigation = !user ? [
-    { title: "About us", path: "/about" },
-    {title: "Cart", path:"/cart"},
-    {title: "History", path:"/order-history"}
-  ]:[
-    { title: user?.restaurantId==="" ? "Business":"Dashboard", path: user?.restaurantId==="" ? "/restaurant":"/restaurant/dashboard" },
-    { title: "About us", path: "/about" },
-    {title: "Cart", path:"/cart"},
-    {title: "History", path:"/order-history"}
-  ];
+  const navigation = !user
+    ? [
+        { title: "About us", path: "/about" },
+        { title: "Cart", path: "/cart" },
+        { title: "History", path: "/order-history" },
+      ]
+    : [
+        {
+          title: user?.restaurantId === "" ? "Business" : "Dashboard",
+          path:
+            user?.restaurantId === "" ? "/restaurant" : "/restaurant/dashboard",
+        },
+        { title: "About us", path: "/about" },
+        { title: "Cart", path: "/cart" },
+        { title: "History", path: "/order-history" },
+      ];
 
-  const getUser = async()=>{
-    if(userId){
+  const getUser = async () => {
+    if (userId) {
       const userdata = await getUserByUserId(userId);
       setUser(userdata);
-    }else{
+    } else {
       setUser(undefined);
     }
-  }
+  };
+  const handleToggle = () => {
+    setToggleMenu(!toggleMenu);
+  };
   useEffect(() => {
-    document.onclick = (e) => {
-      const target = e.target;
-      if (!(target as HTMLElement)?.closest(".menu-btn")) setState(false);
-    };
     getUser();
   }, []);
 
   return (
-    <nav
-      className={`bg-white shadow-sm pb-5 md:text-sm ${
-        state
-          ? "shadow-lg rounded-xl border mt-2 md:shadow-none lg:border-none lg:mt-0"
-          : ""
-      }`}
-    >
-      <div className="gap-x-14 items-center max-w-screen-xl mx-auto px-4 lg:flex lg:px-8">
-        <div className="flex items-center justify-between py-5 lg:block">
-          <Link
-            href="/"
-            className="flex justify-center font-semibold text-gray-900"
-          >
-            <FaHamburger className="text-orange-600 px-1 text-3xl md:text-4xl" />
-            <span className="font-bold text-2xl md:text-3xl">
-              <span>Order</span>
-              <span className="text-rose-800">Ease</span>
-            </span>
-          </Link>
-          <div className="lg:hidden">
-            <button
-              className="menu-btn text-gray-500 hover:text-gray-800"
-              onClick={() => setState(!state)}
-            >
-              {state ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
-              )}
-            </button>
+    <nav className={`w-full shadow-sm flex flex-col gap-3 px-10 md:px-14 py-5`}>
+      <div className="flex items-center justify-between ">
+        <div className="flex gap-5 h-full items-center">
+          <LogoLink />
+          <div className="hidden md:flex gap-4 text-xl text-gray-600">
+            {navigation.map((n: any) => (
+              <Link href={n.path} className="cursor-pointer hover:text-black">
+                {n.title}
+              </Link>
+            ))}
           </div>
         </div>
-        <div
-          className={`flex-1 items-center text-xl mt-8 lg:mt-0 lg:flex ${
-            state ? "block" : "hidden"
-          } `}
-        >
-          <ul className="justify-center items-center space-y-6 lg:flex lg:space-x-6 lg:space-y-0">
-            {navigation.map((item, idx) => {
-              return (
-                <li key={idx} className="text-gray-700 hover:text-gray-900">
-                  <Link href={item.path} className="block">
-                    {item.title}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-          <div className="flex-1 gap-x-6 items-center justify-end mt-6 space-y-6 lg:flex lg:space-y-0 lg:mt-0">
+        <div className="hidden md:flex">
+          <SignedOut>
+            <SignInButton>
+              <button className="lg:border lg:px-5 py-2 lg:rounded-md">
+                Sign in
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton
+              showName={true}
+              userProfileMode="modal"
+              appearance={{
+                elements: {
+                  userButtonOuterIdentifier: "text-xl font-normal",
+                  userButtonBox: "px-5 py-2 outline-none border-0",
+                },
+              }}
+            />
+          </SignedIn>
+        </div>
+        <div className="flex md:hidden p-2">
+          {!toggleMenu && (
+            <MdMenu onClick={handleToggle} className="text-2xl" />
+          )}
+          {toggleMenu && (
+            <MdClose onClick={handleToggle} className="text-2xl" />
+          )}
+        </div>
+      </div>
+      {toggleMenu && (
+        <div className="pl-3 flex flex-col md:hidden gap-4 text-xl text-gray-600">
+          {navigation.map((n: any) => (
+            <Link href={n.path} onClick={handleToggle} className="cursor-pointer hover:text-black">
+              {n.title}
+            </Link>
+          ))}
+          <div className="flex md:hidden">
             <SignedOut>
               <SignInButton>
-                <button className="lg:border lg:px-5 py-2 lg:rounded-md">Sign in</button>
+                <button className="lg:border lg:px-5 py-2 lg:rounded-md">
+                  Sign in
+                </button>
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <UserButton showName={true} userProfileMode="modal" appearance={{elements:{userButtonOuterIdentifier:"text-xl font-normal", userButtonBox:"px-5 py-2 outline-none border-0"}}} />
+              <UserButton
+                showName={true}
+                userProfileMode="modal"
+                appearance={{
+                  elements: {
+                    userButtonOuterIdentifier: "text-xl font-normal",
+                    userButtonBox: "px-5 py-2 outline-none border-0",
+                  },
+                }}
+              />
             </SignedIn>
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
